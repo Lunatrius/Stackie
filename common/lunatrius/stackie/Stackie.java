@@ -23,7 +23,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.TickRegistry;
 
-@Mod(modid = "Stackie", name = "Stackie", version = "1.1.0.5", useMetadata = true)
+@Mod(modid = "Stackie")
 public class Stackie {
 	@Instance("Stackie")
 	public static Stackie instance;
