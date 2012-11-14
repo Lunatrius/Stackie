@@ -22,6 +22,7 @@ import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 @Mod(modid = "Stackie")
 public class Stackie {
@@ -46,18 +47,9 @@ public class Stackie {
 		config.save();
 
 		try {
-			this.xpValue = EntityXPOrb.class.getDeclaredField("e");
-			this.xpValue.setAccessible(true);
-		} catch (Exception e1) {
-			this.xpValue = null;
-
-			try {
-				this.xpValue = EntityXPOrb.class.getDeclaredField("xpValue");
-				this.xpValue.setAccessible(true);
-			} catch (Exception ex2) {
-				ex2.printStackTrace();
-				this.xpValue = null;
-			}
+			this.xpValue = ReflectionHelper.findField(EntityXPOrb.class, "e", "xpValue");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
