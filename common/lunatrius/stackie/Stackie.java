@@ -6,23 +6,23 @@ import java.util.EnumSet;
 import java.util.List;
 
 import lunatrius.stackie.util.Config;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityXPOrb;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.WorldServer;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Stackie")
 public class Stackie {
@@ -119,7 +119,7 @@ public class Stackie {
 					// EntityItem
 					case 0:
 						mcEntityItem = (EntityItem) entityList.get(i);
-						mcItemStack = mcEntityItem.item;
+						mcItemStack = mcEntityItem.func_92014_d();
 
 						// if the entity is not stackable, is at the maximum stack limit or if it's at 0 skip it
 						if (mcItemStack == null || !mcItemStack.isStackable() || mcItemStack.stackSize >= mcItemStack.getMaxStackSize() || mcItemStack.stackSize <= 0) {
@@ -143,7 +143,7 @@ public class Stackie {
 							// EntityItem
 							case 0:
 								localEntityItem = (EntityItem) entityList.get(j);
-								localItemStack = localEntityItem.item;
+								localItemStack = localEntityItem.func_92014_d();
 
 								// if item ID aren't equal, items have a tag compound, position differs or the damage isn't equal skip it
 								if (localItemStack == null) {
@@ -163,12 +163,19 @@ public class Stackie {
 								mcItemStack.stackSize += itemsIn;
 								localItemStack.stackSize -= itemsIn;
 
+								// set the new item stacks
+								mcEntityItem.func_92013_a(mcItemStack);
+								localEntityItem.func_92013_a(localItemStack);
+
 								// the new stack's age is the lowest age of both stacks
 								mcEntityItem.age = Math.min(mcEntityItem.age, localEntityItem.age);
 
 								// if the stack size is bellow or equal to 0 the entity is dead
 								if (localItemStack.stackSize <= 0) {
 									localEntityItem.setDead();
+
+									// set the new position to the average of the merged entities
+									mcEntityItem.setPosition((mcEntityItem.posX + localEntityItem.posX) / 2, (mcEntityItem.posY + localEntityItem.posY) / 2, (mcEntityItem.posZ + localEntityItem.posZ) / 2);
 								}
 								break;
 
@@ -188,6 +195,9 @@ public class Stackie {
 
 									// the new orb's age is the lowest age of both orbs
 									mcEntityXPOrb.xpOrbAge = Math.min(mcEntityXPOrb.xpOrbAge, localEntityXPOrb.xpOrbAge);
+
+									// set the new position to the average of the merged entities
+									mcEntityXPOrb.setPosition((mcEntityXPOrb.posX + localEntityXPOrb.posX) / 2, (mcEntityXPOrb.posY + localEntityXPOrb.posY) / 2, (mcEntityXPOrb.posZ + localEntityXPOrb.posZ) / 2);
 
 									// the entity is dead
 									localEntityXPOrb.setDead();
