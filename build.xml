@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="GenericBukkitPlugin" default="build">
+    <description>Generic Bukkit plugin builder</description>
+
+    <target name="init">
+        <!-- load properties from files -->
+        <property file="build.properties"/>
+        <property file="mod.properties"/>
+        <property name="version" value="${version.major}.${version.minor}.${version.micro}.${version.build}"/>
+
+        <!-- base dirs -->
+        <property name="workspace" location="${dir.workspace}"/>
+        <property name="dev.home" location="${dir.project}"/>
+        <property name="release.home" location="${dir.release}/${mod.id}/${version.minecraft}"/>
+        <property name="release.jar" value="[${version.minecraft}]${mod.id}-bukkit-v${version}.jar"/>
+
+        <!-- setup source dirs -->
+        <property name="dev.src.bukkit" location="${dev.home}/bukkit"/>
+        <property name="dev.src.resources" location="${dev.home}/resources"/>
+
+        <!-- setup class dirs -->
+        <property name="dev.bin.bukkit" location="${dev.home}/bin"/>
+    </target>
+
+    <target name="build-jar">
+        <!-- build the jar -->
+        <jar destfile="${release.home}/${release.jar}">
+            <fileset dir="${dev.bin.bukkit}" excludes="plugin.yml"/>
+            <mappedresources>
+                <concat>
+                    <fileset dir="${dev.src.resources}" includes="plugin.yml"/>
+                    <filterchain>
+                        <replacetokens>
+                            <token key="AUTHORS" value="${mod.authors}"/>
+                            <token key="CREDITS" value="${mod.credits}"/>
+                            <token key="DEPENDANTS" value="${mod.dependants}"/>
+                            <token key="DEPENDENCIES" value="${mod.dependencies}"/>
+                            <token key="DESCRIPTION" value="${mod.description}"/>
+                            <token key="LOGOFILE" value="${mod.logoFile}"/>
+                            <token key="MCVERSION" value="${version.minecraft}"/>
+                            <token key="MODID" value="${mod.id}"/>
+                            <token key="MODNAME" value="${mod.name}"/>
+                            <token key="PARENT" value="${mod.parent}"/>
+                            <token key="REQUIREDMODS" value="${mod.requiredMods}"/>
+                            <token key="SCREENSHOTS" value="${mod.screenshots}"/>
+                            <token key="UPDATEURL" value="${mod.updateUrl}"/>
+                            <token key="URL" value="${mod.url}"/>
+                            <token key="USEDEPENDANCYINFORMATION" value="${mod.useDependencyInformation}"/>
+                            <token key="VERSION" value="${version}"/>
+                        </replacetokens>
+                    </filterchain>
+                </concat>
+                <mergemapper to="plugin.yml"/>
+            </mappedresources>
+        </jar>
+    </target>
+
+    <target name="build" depends="init">
+        <!-- build the jar file -->
+        <antcall target="build-jar"/>
+    </target>
+</project>
