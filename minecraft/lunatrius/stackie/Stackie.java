@@ -42,8 +42,8 @@ public class Stackie {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 
 		config.load();
-		this.interval = Config.getInt(config, "interval", Configuration.CATEGORY_GENERAL, this.interval, 5, 500, "Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.");
-		this.distance = Config.getFloat(config, "distance", Configuration.CATEGORY_GENERAL, this.distance, 0.01f, 10f, "Maximum distance between items that can be still stacked (relative to block size).");
+		this.interval = Config.getInt(config, Configuration.CATEGORY_GENERAL, "interval", this.interval, 5, 500, "Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.");
+		this.distance = (float) Config.getDouble(config, Configuration.CATEGORY_GENERAL, "distance", this.distance, 0.01, 10, "Maximum distance between items that can be still stacked (relative to block size).");
 		config.save();
 
 		try {
@@ -96,11 +96,13 @@ public class Stackie {
 			}
 
 			int mcType = -1;
+			Entity mcEntity = null;
 			EntityItem mcEntityItem = null;
 			ItemStack mcItemStack = null;
 			EntityXPOrb mcEntityXPOrb = null;
 
 			int localType = -1;
+			Entity localEntity = null;
 			EntityItem localEntityItem = null;
 			ItemStack localItemStack = null;
 			EntityXPOrb localEntityXPOrb = null;
@@ -108,18 +110,19 @@ public class Stackie {
 			try {
 				for (int i = 0; i < entityList.size() - 1; i++) {
 					// if the entity is dead skip it
-					if (entityList.get(i).isDead) {
+					mcEntity = entityList.get(i);
+					if (mcEntity.isDead) {
 						continue;
 					}
 
 					// get entity's type
-					mcType = getType(entityList.get(i));
+					mcType = getType(mcEntity);
 
 					switch (mcType) {
 					// EntityItem
 					case 0:
-						mcEntityItem = (EntityItem) entityList.get(i);
-						mcItemStack = mcEntityItem.func_92014_d();
+						mcEntityItem = (EntityItem) mcEntity;
+						mcItemStack = mcEntityItem.getEntityItem();
 
 						// if the entity is not stackable, is at the maximum stack limit or if it's at 0 skip it
 						if (mcItemStack == null || !mcItemStack.isStackable() || mcItemStack.stackSize >= mcItemStack.getMaxStackSize() || mcItemStack.stackSize <= 0) {
@@ -129,21 +132,27 @@ public class Stackie {
 
 					// EntityXPOrb
 					case 1:
-						mcEntityXPOrb = (EntityXPOrb) entityList.get(i);
+						mcEntityXPOrb = (EntityXPOrb) mcEntity;
 						break;
 					}
 
 					for (int j = i + 1; j < entityList.size(); j++) {
+						// if the entity is dead skip it
+						localEntity = entityList.get(j);
+						if (localEntity.isDead) {
+							continue;
+						}
+
 						// get entity's type
-						localType = getType(entityList.get(j));
+						localType = getType(localEntity);
 
 						// entity types match
 						if (mcType == localType) {
 							switch (mcType) {
 							// EntityItem
 							case 0:
-								localEntityItem = (EntityItem) entityList.get(j);
-								localItemStack = localEntityItem.func_92014_d();
+								localEntityItem = (EntityItem) localEntity;
+								localItemStack = localEntityItem.getEntityItem();
 
 								// if item ID aren't equal, items have a tag compound, position differs or the damage isn't equal skip it
 								if (localItemStack == null) {
@@ -164,8 +173,8 @@ public class Stackie {
 								localItemStack.stackSize -= itemsIn;
 
 								// set the new item stacks
-								mcEntityItem.func_92013_a(mcItemStack);
-								localEntityItem.func_92013_a(localItemStack);
+								mcEntityItem.setEntityItemStack(mcItemStack);
+								localEntityItem.setEntityItemStack(localItemStack);
 
 								// the new stack's age is the lowest age of both stacks
 								mcEntityItem.age = Math.min(mcEntityItem.age, localEntityItem.age);
@@ -181,7 +190,7 @@ public class Stackie {
 
 							// EntityXPOrb
 							case 1:
-								localEntityXPOrb = (EntityXPOrb) entityList.get(j);
+								localEntityXPOrb = (EntityXPOrb) localEntity;
 
 								// if positions differ skip it
 								if (!isEqualPosition(mcEntityXPOrb, localEntityXPOrb)) {
