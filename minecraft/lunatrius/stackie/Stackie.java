@@ -47,7 +47,7 @@ public class Stackie {
 		config.save();
 
 		try {
-			this.xpValue = ReflectionHelper.findField(EntityXPOrb.class, "e", "xpValue");
+			this.xpValue = ReflectionHelper.findField(EntityXPOrb.class, "e", "field_70530_e", "xpValue");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
