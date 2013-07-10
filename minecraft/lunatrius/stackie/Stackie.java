@@ -1,12 +1,13 @@
 package lunatrius.stackie;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -30,20 +31,24 @@ public class Stackie {
 	public static Stackie instance;
 
 	// loaded from config
-	public int interval = 20;
-	public float distance = 0.75f;
+	private int interval = 20;
+	private float distance = 0.75f;
+	private boolean stackItems = true;
+	private boolean stackExperience = true;
 
 	private Field xpValue = null;
 	private MinecraftServer server = null;
 	private int ticks = -1;
 
-	@PreInit
+	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 
 		config.load();
 		this.interval = Config.getInt(config, Configuration.CATEGORY_GENERAL, "interval", this.interval, 5, 500, "Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.");
 		this.distance = (float) Config.getDouble(config, Configuration.CATEGORY_GENERAL, "distance", this.distance, 0.01, 10, "Maximum distance between items that can be still stacked (relative to block size).");
+		this.stackItems = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "stackItems", this.stackItems, "Should it stack items?");
+		this.stackExperience = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "stackExperience", this.stackExperience, "Should it stack experience orbs?");
 		config.save();
 
 		try {
@@ -53,21 +58,26 @@ public class Stackie {
 		}
 	}
 
-	@Init
+	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		// register a new ticker with normal server ticks
 		TickRegistry.registerTickHandler(new Ticker(EnumSet.of(TickType.SERVER)), Side.SERVER);
+	}
+
+	@EventHandler
+	public void serverStarting(FMLServerStartingEvent event) {
+		this.server = event.getServer();
+	}
+
+	@EventHandler
+	public void serverStopping(FMLServerStoppingEvent event) {
+		this.server = null;
 	}
 
 	public boolean onTick(TickType tickType, boolean start) {
 		// skip starting ticks
 		if (start) {
 			return true;
-		}
-
-		// if the server isn't set try to set it
-		if (this.server == null) {
-			this.server = MinecraftServer.getServer();
 		}
 
 		// decrease the amount of ticks left; if there are less than 0 ticks left and the world is local stack the entities
@@ -100,12 +110,17 @@ public class Stackie {
 			EntityItem mcEntityItem = null;
 			ItemStack mcItemStack = null;
 			EntityXPOrb mcEntityXPOrb = null;
+			double mcWeight = -1;
 
 			int localType = -1;
 			Entity localEntity = null;
 			EntityItem localEntityItem = null;
 			ItemStack localItemStack = null;
 			EntityXPOrb localEntityXPOrb = null;
+			double localWeight = -1;
+
+			boolean merged = false;
+			double totalWeight = -1;
 
 			try {
 				for (int i = 0; i < entityList.size() - 1; i++) {
@@ -148,6 +163,9 @@ public class Stackie {
 
 						// entity types match
 						if (mcType == localType) {
+							// reset the merged flag
+							merged = false;
+
 							switch (mcType) {
 							// EntityItem
 							case 0:
@@ -167,6 +185,9 @@ public class Stackie {
 									continue;
 								}
 
+								mcWeight = mcItemStack.stackSize;
+								localWeight = localItemStack.stackSize;
+
 								// move the items from one stack to the other
 								int itemsIn = Math.min(mcItemStack.getMaxStackSize() - mcItemStack.stackSize, localItemStack.stackSize);
 								mcItemStack.stackSize += itemsIn;
@@ -179,12 +200,9 @@ public class Stackie {
 								// the new stack's age is the lowest age of both stacks
 								mcEntityItem.age = Math.min(mcEntityItem.age, localEntityItem.age);
 
-								// if the stack size is bellow or equal to 0 the entity is dead
+								// if the stack size is bellow or equal to 0 the entities have merged
 								if (localItemStack.stackSize <= 0) {
-									localEntityItem.setDead();
-
-									// set the new position to the average of the merged entities
-									mcEntityItem.setPosition((mcEntityItem.posX + localEntityItem.posX) / 2, (mcEntityItem.posY + localEntityItem.posY) / 2, (mcEntityItem.posZ + localEntityItem.posZ) / 2);
+									merged = true;
 								}
 								break;
 
@@ -198,6 +216,9 @@ public class Stackie {
 								}
 
 								try {
+									mcWeight = mcEntityXPOrb.getXpValue();
+									localWeight = localEntityXPOrb.getXpValue();
+
 									// set the new experience values
 									this.xpValue.setInt(mcEntityXPOrb, mcEntityXPOrb.getXpValue() + localEntityXPOrb.getXpValue());
 									this.xpValue.setInt(localEntityXPOrb, 0);
@@ -205,15 +226,30 @@ public class Stackie {
 									// the new orb's age is the lowest age of both orbs
 									mcEntityXPOrb.xpOrbAge = Math.min(mcEntityXPOrb.xpOrbAge, localEntityXPOrb.xpOrbAge);
 
-									// set the new position to the average of the merged entities
-									mcEntityXPOrb.setPosition((mcEntityXPOrb.posX + localEntityXPOrb.posX) / 2, (mcEntityXPOrb.posY + localEntityXPOrb.posY) / 2, (mcEntityXPOrb.posZ + localEntityXPOrb.posZ) / 2);
-
-									// the entity is dead
-									localEntityXPOrb.setDead();
+									// the entities have been merged
+									merged = true;
 								} catch (Exception ex) {
 									ex.printStackTrace();
 								}
 								break;
+							}
+
+							if (merged) {
+								// the entity is dead
+								localEntity.setDead();
+
+								// sum up the weights
+								totalWeight = mcWeight + localWeight;
+
+								// set the new weights
+								mcWeight /= totalWeight;
+								localWeight /= totalWeight;
+
+								// set the new position to the average of the merged entities
+								mcEntity.setPosition(mcEntity.posX * mcWeight + localEntity.posX * localWeight, mcEntity.posY * mcWeight + localEntity.posY * localWeight, mcEntity.posZ * mcWeight + localEntity.posZ * localWeight);
+
+								// set the new velocity to the average of the merged entities
+								mcEntity.setVelocity(mcEntity.motionX * mcWeight + localEntity.motionX * localWeight, mcEntity.motionY * mcWeight + localEntity.motionY * localWeight, mcEntity.motionZ * mcWeight + localEntity.motionZ * localWeight);
 							}
 						}
 					}
