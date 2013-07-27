@@ -139,8 +139,8 @@ public class Stackie {
 						mcEntityItem = (EntityItem) mcEntity;
 						mcItemStack = mcEntityItem.getEntityItem();
 
-						// if the entity is not stackable, is at the maximum stack limit or if it's at 0 skip it
-						if (mcItemStack == null || !mcItemStack.isStackable() || mcItemStack.stackSize >= mcItemStack.getMaxStackSize() || mcItemStack.stackSize <= 0) {
+						// if the entity is not stackable or the stack size is 0 or less skip it
+						if (mcItemStack == null || !mcItemStack.isStackable() || mcItemStack.stackSize <= 0) {
 							continue;
 						}
 						break;
@@ -163,6 +163,11 @@ public class Stackie {
 
 						// entity types match
 						if (mcType == localType) {
+							// if positions differ skip it
+							if (!isEqualPosition(mcEntity, localEntity)) {
+								continue;
+							}
+
 							// reset the merged flag
 							merged = false;
 
@@ -179,8 +184,6 @@ public class Stackie {
 									continue;
 								} else if (mcItemStack.stackTagCompound != null || localItemStack.stackTagCompound != null) {
 									continue;
-								} else if (!isEqualPosition(mcEntityItem, localEntityItem)) {
-									continue;
 								} else if (mcItemStack.getItemDamage() != localItemStack.getItemDamage()) {
 									continue;
 								}
@@ -189,7 +192,7 @@ public class Stackie {
 								localWeight = localItemStack.stackSize;
 
 								// move the items from one stack to the other
-								int itemsIn = Math.min(mcItemStack.getMaxStackSize() - mcItemStack.stackSize, localItemStack.stackSize);
+								int itemsIn = Math.min(2048 - mcItemStack.stackSize, localItemStack.stackSize);
 								mcItemStack.stackSize += itemsIn;
 								localItemStack.stackSize -= itemsIn;
 
@@ -209,11 +212,6 @@ public class Stackie {
 							// EntityXPOrb
 							case 1:
 								localEntityXPOrb = (EntityXPOrb) localEntity;
-
-								// if positions differ skip it
-								if (!isEqualPosition(mcEntityXPOrb, localEntityXPOrb)) {
-									continue;
-								}
 
 								try {
 									mcWeight = mcEntityXPOrb.getXpValue();
