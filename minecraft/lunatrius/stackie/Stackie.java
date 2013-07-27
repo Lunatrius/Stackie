@@ -247,7 +247,9 @@ public class Stackie {
 								mcEntity.setPosition(mcEntity.posX * mcWeight + localEntity.posX * localWeight, mcEntity.posY * mcWeight + localEntity.posY * localWeight, mcEntity.posZ * mcWeight + localEntity.posZ * localWeight);
 
 								// set the new velocity to the average of the merged entities
-								mcEntity.setVelocity(mcEntity.motionX * mcWeight + localEntity.motionX * localWeight, mcEntity.motionY * mcWeight + localEntity.motionY * localWeight, mcEntity.motionZ * mcWeight + localEntity.motionZ * localWeight);
+								mcEntity.motionX = mcEntity.motionX * mcWeight + localEntity.motionX * localWeight;
+								mcEntity.motionY = mcEntity.motionY * mcWeight + localEntity.motionY * localWeight;
+								mcEntity.motionZ = mcEntity.motionZ * mcWeight + localEntity.motionZ * localWeight;
 							}
 						}
 					}
