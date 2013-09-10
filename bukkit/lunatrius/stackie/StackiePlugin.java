@@ -15,6 +15,14 @@ public class StackiePlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		this.saveDefaultConfig();
+
+		Stackie stackie = Stackie.instance;
+		stackie.interval = this.getConfig().getInt("interval", stackie.interval);
+		stackie.distance = this.getConfig().getDouble("distance", stackie.distance);
+		stackie.stackItems = this.getConfig().getBoolean("stack.items", stackie.stackItems);
+		stackie.stackExperience = this.getConfig().getBoolean("stack.experience", stackie.stackExperience);
+
 		this.server = getServer();
 		this.scheduler = this.server.getScheduler();
 		this.taskId = this.scheduler.scheduleSyncRepeatingTask(this, new Runnable() {

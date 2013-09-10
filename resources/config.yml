@@ -1,0 +1,12 @@
+# default config.yml
+
+# stack things every X ticks (20 ticks = 1 second)
+interval: 20
+
+# maximum stacking distance
+distance: 0.75
+
+# enable/disable stacking of different entities
+stack:
+    items: true
+    experience: true

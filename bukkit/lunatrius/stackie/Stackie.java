@@ -1,16 +1,21 @@
 package lunatrius.stackie;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Stackie {
 	public static Stackie instance = new Stackie();
+
+	public int interval = 20;
+	public double distance = 0.75;
+	public boolean stackItems = false;
+	public boolean stackExperience = true;
 
 	private Stackie() {
 	}
@@ -36,19 +41,22 @@ public class Stackie {
 			Item mcItem = null;
 			ItemStack mcItemStack = null;
 			ExperienceOrb mcExperienceOrb = null;
+			double mcWeight = -1;
 
 			int localType = -1;
 			Entity localEntity = null;
 			Item localItem = null;
 			ItemStack localItemStack = null;
 			ExperienceOrb localExperienceOrb = null;
+			double localWeight = -1;
+
+			boolean merged = false;
+			double totalWeight = -1;
 
 			try {
-				for (int i = 0; i < entityList.size(); i++) {
-					// cache the i-th entity
-					mcEntity = entityList.get(i);
-
+				for (int i = 0; i < entityList.size() - 1; i++) {
 					// if the entity is dead skip it
+					mcEntity = entityList.get(i);
 					if (mcEntity.isDead()) {
 						continue;
 					}
@@ -63,7 +71,7 @@ public class Stackie {
 						mcItemStack = mcItem.getItemStack();
 
 						// if the entity is not stackable, is at the maximum stack limit or if it's at 0 skip it
-						if (mcItemStack == null || mcItemStack.getAmount() >= mcItemStack.getMaxStackSize() || mcItemStack.getAmount() <= 0) {
+						if (mcItemStack == null || mcItemStack.getMaxStackSize() <= 1 || mcItemStack.getAmount() <= 0) {
 							continue;
 						}
 						break;
@@ -75,10 +83,8 @@ public class Stackie {
 					}
 
 					for (int j = i + 1; j < entityList.size(); j++) {
-						// cache the j-th entity
-						localEntity = entityList.get(j);
-
 						// if the entity is dead skip it
+						localEntity = entityList.get(j);
 						if (localEntity.isDead()) {
 							continue;
 						}
@@ -88,6 +94,14 @@ public class Stackie {
 
 						// entity types match
 						if (mcType == localType) {
+							// if positions differ skip it
+							if (mcEntity.getLocation().distance(localEntity.getLocation()) > this.distance) {
+								continue;
+							}
+
+							// reset the merged flag
+							merged = false;
+
 							switch (mcType) {
 							// Item
 							case 0:
@@ -101,34 +115,27 @@ public class Stackie {
 									continue;
 								} else if (mcItemStack.hasItemMeta() || localItemStack.hasItemMeta()) {
 									continue;
-								} else if (mcItem.getLocation().distance(localItem.getLocation()) > 0.75) {
-									continue;
 								} else if (mcItemStack.getDurability() != localItemStack.getDurability()) {
 									continue;
 								}
 
 								// move the items from one stack to the other
-								int itemsIn = Math.min(mcItemStack.getMaxStackSize() - mcItemStack.getAmount(), localItemStack.getAmount());
+								int itemsIn = Math.min(2048 - mcItemStack.getAmount(), localItemStack.getAmount());
 								mcItemStack.setAmount(mcItemStack.getAmount() + itemsIn);
 								localItemStack.setAmount(localItemStack.getAmount() - itemsIn);
 
 								// the new stack's age is the lowest age of both stacks
 								mcItem.setTicksLived(Math.max(1, Math.min(mcItem.getTicksLived(), localItem.getTicksLived())));
 
-								// if the stack size is bellow or equal to 0 the second entity is dead
+								// if the stack size is bellow or equal to 0 the entities have merged
 								if (localItemStack.getAmount() <= 0) {
-									localItem.remove();
+									merged = true;
 								}
 								break;
 
 							// ExperienceOrb
 							case 1:
 								localExperienceOrb = (ExperienceOrb) localEntity;
-
-								// if positions differ skip it
-								if (mcExperienceOrb.getLocation().distance(localExperienceOrb.getLocation()) > 0.75) {
-									continue;
-								}
 
 								// set the experience values
 								mcExperienceOrb.setExperience(mcExperienceOrb.getExperience() + localExperienceOrb.getExperience());
@@ -137,9 +144,27 @@ public class Stackie {
 								// the new orb's age is the lowest age of both orbs
 								mcExperienceOrb.setTicksLived(Math.max(1, Math.min(mcExperienceOrb.getTicksLived(), localExperienceOrb.getTicksLived())));
 
-								// the second entity is dead
-								localExperienceOrb.remove();
+								// the entities have been merged
+								merged = true;
 								break;
+							}
+
+							if (merged) {
+								// the entity is dead
+								localEntity.remove();
+
+								// sum up the weights
+								totalWeight = mcWeight + localWeight;
+
+								// set the new weights
+								mcWeight /= totalWeight;
+								localWeight /= totalWeight;
+
+								// set the new position to the average of the merged entities
+								mcEntity.teleport(mcEntity.getLocation().multiply(mcWeight).add(localEntity.getLocation().multiply(localWeight)));
+
+								// set the new velocity to the average of the merged entities
+								mcEntity.setVelocity(mcEntity.getVelocity().multiply(mcWeight).add(localEntity.getVelocity().multiply(localWeight)));
 							}
 						}
 					}
@@ -151,9 +176,9 @@ public class Stackie {
 	}
 
 	private int getType(Entity entity) {
-		if (entity instanceof Item) {
+		if (this.stackItems && entity instanceof Item) {
 			return 0;
-		} else if (entity instanceof ExperienceOrb) {
+		} else if (this.stackExperience && entity instanceof ExperienceOrb) {
 			return 1;
 		}
 		return -1;

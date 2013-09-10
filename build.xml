@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="GenericBukkitPlugin" default="build">
-    <description>Generic Bukkit plugin builder</description>
+<project name="StackieBukkitPlugin" default="build">
+    <description>Stackie Plugin Builder</description>
 
     <target name="init">
         <!-- load properties from files -->
         <property file="build.properties"/>
-        <property file="mod.properties"/>
+        <property file="plugin.properties"/>
         <property name="version" value="${version.major}.${version.minor}.${version.micro}.${version.build}"/>
 
         <!-- base dirs -->
         <property name="workspace" location="${dir.workspace}"/>
         <property name="dev.home" location="${dir.project}"/>
-        <property name="release.home" location="${dir.release}/${mod.id}/${version.minecraft}"/>
+        <property name="release.home" location="${dir.release}"/>
         <property name="release.jar" value="[${version.minecraft}]${mod.id}-bukkit-v${version}.jar"/>
 
         <!-- setup source dirs -->
@@ -26,27 +26,18 @@
     <target name="build-jar">
         <!-- build the jar -->
         <jar destfile="${release.home}/${release.jar}">
-            <fileset dir="${dev.bin.bukkit}" excludes="plugin.yml"/>
+            <fileset dir="${dev.bin.bukkit}"/>
+            <fileset dir="${dev.src.resources}" excludes="plugin.yml"/>
             <mappedresources>
                 <concat>
                     <fileset dir="${dev.src.resources}" includes="plugin.yml"/>
                     <filterchain>
                         <replacetokens>
                             <token key="AUTHORS" value="${mod.authors}"/>
-                            <token key="CREDITS" value="${mod.credits}"/>
-                            <token key="DEPENDANTS" value="${mod.dependants}"/>
-                            <token key="DEPENDENCIES" value="${mod.dependencies}"/>
                             <token key="DESCRIPTION" value="${mod.description}"/>
-                            <token key="LOGOFILE" value="${mod.logoFile}"/>
-                            <token key="MCVERSION" value="${version.minecraft}"/>
                             <token key="MODID" value="${mod.id}"/>
                             <token key="MODNAME" value="${mod.name}"/>
-                            <token key="PARENT" value="${mod.parent}"/>
-                            <token key="REQUIREDMODS" value="${mod.requiredMods}"/>
-                            <token key="SCREENSHOTS" value="${mod.screenshots}"/>
-                            <token key="UPDATEURL" value="${mod.updateUrl}"/>
                             <token key="URL" value="${mod.url}"/>
-                            <token key="USEDEPENDANCYINFORMATION" value="${mod.useDependencyInformation}"/>
                             <token key="VERSION" value="${version}"/>
                         </replacetokens>
                     </filterchain>
@@ -59,5 +50,9 @@
     <target name="build" depends="init">
         <!-- build the jar file -->
         <antcall target="build-jar"/>
+    </target>
+
+    <target name="release" depends="build">
+        <signjar jar="${release.home}/${release.jar}" keystore="${signjar.keystore}" alias="${signjar.alias}" storepass="${signjar.storepass}" />
     </target>
 </project>
