@@ -260,9 +260,9 @@ public class Stackie {
 	}
 
 	private int getType(Entity entity) {
-		if (entity instanceof EntityItem) {
+		if (this.stackItems && entity instanceof EntityItem) {
 			return 0;
-		} else if (entity instanceof EntityXPOrb && this.xpValue != null) {
+		} else if (this.stackExperience && entity instanceof EntityXPOrb && this.xpValue != null) {
 			return 1;
 		}
 		return -1;
