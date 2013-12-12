@@ -4,10 +4,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -15,6 +12,7 @@ import lunatrius.stackie.util.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
@@ -35,6 +33,18 @@ public class Stackie {
 	private float distance = 0.75f;
 	private boolean stackItems = true;
 	private boolean stackExperience = true;
+	private String[] stackSizes = new String[] {
+			"324:8:doorWood",
+			"328:4:minecart",
+			"329:8:saddle",
+			"330:8:doorIron",
+			"333:4:boat",
+			"342:4:minecartChest",
+			"343:4:minecartFurnace",
+			"373:4:potion",
+			"407:4:minecartTnt",
+			"408:4:minecartHopper"
+	};
 
 	private Field xpValue = null;
 	private MinecraftServer server = null;
@@ -49,6 +59,7 @@ public class Stackie {
 		this.distance = (float) Config.getDouble(config, Configuration.CATEGORY_GENERAL, "distance", this.distance, 0.01, 10, "Maximum distance between items that can be still stacked (relative to block size).");
 		this.stackItems = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "stackItems", this.stackItems, "Should it stack items?");
 		this.stackExperience = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "stackExperience", this.stackExperience, "Should it stack experience orbs?");
+		this.stackSizes = Config.getStringList(config, Configuration.CATEGORY_GENERAL, "stackSizes", this.stackSizes, "A list of itemID:stackSize[:optional comment] mappings. These values will override the default stack sizes. Do not use anything above 64, it will break, horribly.");
 		config.save();
 
 		try {
@@ -62,6 +73,28 @@ public class Stackie {
 	public void init(FMLInitializationEvent event) {
 		// register a new ticker with normal server ticks
 		TickRegistry.registerTickHandler(new Ticker(EnumSet.of(TickType.SERVER)), Side.SERVER);
+	}
+
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		for (String info : this.stackSizes) {
+			String[] parts = info.split(":");
+			if (parts.length >= 2) {
+				try {
+					int itemID = Integer.parseInt(parts[0], 10);
+					int stackSize = Integer.parseInt(parts[1], 10);
+
+					if (itemID >= 0 && itemID < Item.itemsList.length) {
+						Item item = Item.itemsList[itemID];
+						if (item != null) {
+							item.setMaxStackSize(stackSize);
+						}
+					}
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	@EventHandler
