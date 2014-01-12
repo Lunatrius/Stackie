@@ -1,4 +1,4 @@
-package lunatrius.stackie.util;
+package com.github.lunatrius.stackie.util;
 
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;

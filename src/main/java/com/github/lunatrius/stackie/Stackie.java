@@ -1,4 +1,4 @@
-package lunatrius.stackie;
+package com.github.lunatrius.stackie;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -8,7 +8,7 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
-import lunatrius.stackie.util.Config;
+import com.github.lunatrius.stackie.util.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;

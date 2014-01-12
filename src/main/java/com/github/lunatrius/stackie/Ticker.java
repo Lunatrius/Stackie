@@ -1,4 +1,4 @@
-package lunatrius.stackie;
+package com.github.lunatrius.stackie;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
