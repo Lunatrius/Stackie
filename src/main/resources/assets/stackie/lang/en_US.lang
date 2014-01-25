@@ -1,0 +1,6 @@
+# Commands
+commands.stackie.usage=/stackie <setinterval|setdistance|stackitems|stackexperience> <number|true|false>
+commands.stackie.interval=Stacking interval was set to: %d (%.1f seconds)
+commands.stackie.distance=Stacking distance was set to: %.2f
+commands.stackie.stackitems=Stacking of items was set to: %s
+commands.stackie.stackexperience=Stacking of experience was set to: %s

@@ -1,6 +1,7 @@
 package com.github.lunatrius.stackie;
 
 import com.github.lunatrius.core.version.VersionChecker;
+import com.github.lunatrius.stackie.command.StackieCommand;
 import com.github.lunatrius.stackie.config.Config;
 import com.github.lunatrius.stackie.lib.Reference;
 import com.github.lunatrius.stackie.lib.Strings;
@@ -61,6 +62,7 @@ public class Stackie {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 		this.ticker.setServer(event.getServer());
+		event.registerServerCommand(new StackieCommand(this.config));
 	}
 
 	@EventHandler
