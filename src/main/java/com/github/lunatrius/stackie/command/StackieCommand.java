@@ -49,22 +49,22 @@ public class StackieCommand extends CommandBase {
 		if (args.length > 0) {
 			if (args[0].equalsIgnoreCase(Strings.COMMANDS_STACKIE_ARG_INTERVAL)) {
 				this.config.setInterval(Integer.parseInt(args[1]));
-				commandSender.func_145747_a(new ChatComponentTranslation(Strings.COMMANDS_STACKIE_INTERVAL, this.config.interval, this.config.interval / 20.0));
+				commandSender.addChatMessage(new ChatComponentTranslation(Strings.COMMANDS_STACKIE_INTERVAL, this.config.interval, this.config.interval / 20.0));
 				this.config.save();
 				return;
 			} else if (args[0].equalsIgnoreCase(Strings.COMMANDS_STACKIE_ARG_DISTANCE)) {
 				this.config.setDistance(Double.parseDouble(args[1]));
-				commandSender.func_145747_a(new ChatComponentTranslation(Strings.COMMANDS_STACKIE_DISTANCE, this.config.distance));
+				commandSender.addChatMessage(new ChatComponentTranslation(Strings.COMMANDS_STACKIE_DISTANCE, this.config.distance));
 				this.config.save();
 				return;
 			} else if (args[0].equalsIgnoreCase(Strings.COMMANDS_STACKIE_ARG_STACKITEMS)) {
 				this.config.setStackItems(Boolean.parseBoolean(args[1].toLowerCase()));
-				commandSender.func_145747_a(new ChatComponentTranslation(Strings.COMMANDS_STACKIE_STACKITEMS, this.config.stackItems));
+				commandSender.addChatMessage(new ChatComponentTranslation(Strings.COMMANDS_STACKIE_STACKITEMS, this.config.stackItems));
 				this.config.save();
 				return;
 			} else if (args[0].equalsIgnoreCase(Strings.COMMANDS_STACKIE_ARG_STACKEXPERIENCE)) {
 				this.config.setStackExperience(Boolean.parseBoolean(args[1].toLowerCase()));
-				commandSender.func_145747_a(new ChatComponentTranslation(Strings.COMMANDS_STACKIE_STACKEXPERIENCE, this.config.stackExperience));
+				commandSender.addChatMessage(new ChatComponentTranslation(Strings.COMMANDS_STACKIE_STACKEXPERIENCE, this.config.stackExperience));
 				this.config.save();
 				return;
 			}
