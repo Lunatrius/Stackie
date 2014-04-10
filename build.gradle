@@ -1,0 +1,109 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+}
+
+apply plugin: "java"
+apply plugin: "idea"
+apply plugin: "eclipse"
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+
+ext.build = System.getenv().BUILD_NUMBER ?: "dev"
+ext.pluginversion = "${config.version.major}.${config.version.minor}.${config.version.micro}.${build}"
+
+group = "com.github.lunatrius"
+version = "${config.version.bukkit}-${pluginversion}"
+archivesBaseName = config.plugin.id
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "bukkit releases"
+        url "http://repo.bukkit.org/content/repositories/releases"
+    }
+    maven {
+        name = "bukkit snapshots"
+        url "http://repo.bukkit.org/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+    compile group: "org.bukkit", name: "bukkit", version: config.version.bukkit
+}
+
+jar {
+    classifier = "bukkit"
+}
+
+processResources {
+    from (sourceSets.main.resources.srcDirs) {
+        include "plugin.yml"
+
+        expand ([
+            "version": version
+        ])
+    }
+
+    from (sourceSets.main.resources.srcDirs) {
+        exclude "plugin.yml"
+    }
+}
+
+if (!project.hasProperty("release_location_bukkit"))
+    ext.release_location_bukkit = "."
+else
+    ext.release_location_bukkit = release_location_bukkit.replace("{pluginid}", config.plugin.id).replace("{bukkitversion}", config.version.bukkit).replace("{version}", version)
+
+task signJar(dependsOn: "jar") {
+    inputs.file jar.getArchivePath()
+    inputs.file keystore_location
+    inputs.property "keystore_alias", keystore_alias
+    inputs.property "keystore_password", keystore_password
+    outputs.file jar.getArchivePath()
+
+    onlyIf {
+        return keystore_location != "."
+    }
+
+    doLast {
+        ant.signjar(
+            destDir: jar.destinationDir,
+            jar: jar.getArchivePath(),
+            keystore: keystore_location,
+            alias: keystore_alias,
+            storepass: keystore_password
+        )
+    }
+}
+
+task release(dependsOn: ["build", "signJar"], type: Copy) {
+    from project.tasks.jar.destinationDir
+    into project.file(project.release_location_bukkit)
+
+    eachFile { file ->
+        logger.info "copying ${file}"
+    }
+
+    onlyIf {
+        return project.release_location_bukkit != "."
+    }
+}
