@@ -111,7 +111,7 @@ public class Stackie {
 								// if item ID aren't equal, items have a tag compound, position differs or the damage isn't equal skip it
 								if (localItemStack == null) {
 									continue;
-								} else if (mcItemStack.getTypeId() != localItemStack.getTypeId()) {
+								} else if (mcItemStack.getType() != localItemStack.getType()) {
 									continue;
 								} else if (mcItemStack.hasItemMeta() || localItemStack.hasItemMeta()) {
 									continue;

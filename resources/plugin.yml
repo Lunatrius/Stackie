@@ -1,6 +1,0 @@
-name: @MODNAME@
-version: @VERSION@
-description: @DESCRIPTION@
-author: @AUTHORS@
-main: lunatrius.stackie.StackiePlugin
-website: @URL@

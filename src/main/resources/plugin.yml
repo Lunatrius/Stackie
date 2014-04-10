@@ -1,0 +1,6 @@
+name: Stackie
+version: ${version}
+description: Stack entities into bigger stacks to decrease lag.
+author: Lunatrius
+main: lunatrius.stackie.StackiePlugin
+website: http://www.minecraftforum.net/topic/1296949-/
