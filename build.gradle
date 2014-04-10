@@ -68,6 +68,15 @@ processResources {
     }
 }
 
+if (!project.hasProperty("keystore_location"))
+    ext.keystore_location = "."
+
+if (!project.hasProperty("keystore_alias"))
+    ext.keystore_alias = ""
+
+if (!project.hasProperty("keystore_password"))
+    ext.keystore_password = ""
+
 if (!project.hasProperty("release_location_bukkit"))
     ext.release_location_bukkit = "."
 else
