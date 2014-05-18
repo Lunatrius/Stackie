@@ -1,0 +1,6 @@
+# Commands
+commands.stackie.usage=/stackie <setinterval|setdistance|stackitems|stackexperience> <number|true|false>
+commands.stackie.interval=Интервал укладки установлен на: %d (%.1f секунд)
+commands.stackie.distance=Дистанция укладки установлена на: %.2f
+commands.stackie.stackitems=Укладка предметов установлена на: %s
+commands.stackie.stackexperience=Укладка опыта установлена на: %s
