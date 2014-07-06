@@ -25,17 +25,17 @@ public class Config extends Configuration {
 	public boolean stackItems = true;
 	public boolean stackExperience = true;
 	public String[] stackSizes = new String[] {
-			GameData.itemRegistry.getNameForObject(Items.wooden_door) + Strings.CONFIG_STACKSIZE_DELIMITER + 64,
-			GameData.itemRegistry.getNameForObject(Items.minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
-			GameData.itemRegistry.getNameForObject(Items.saddle) + Strings.CONFIG_STACKSIZE_DELIMITER + 8,
-			GameData.itemRegistry.getNameForObject(Items.iron_door) + Strings.CONFIG_STACKSIZE_DELIMITER + 64,
-			GameData.itemRegistry.getNameForObject(Items.boat) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
-			GameData.itemRegistry.getNameForObject(Items.chest_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
-			GameData.itemRegistry.getNameForObject(Items.furnace_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
-			GameData.itemRegistry.getNameForObject(Items.potionitem) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
-			GameData.itemRegistry.getNameForObject(Items.tnt_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
-			GameData.itemRegistry.getNameForObject(Items.hopper_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
-			GameData.itemRegistry.getNameForObject(Items.command_block_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4
+			GameData.getItemRegistry().getNameForObject(Items.wooden_door) + Strings.CONFIG_STACKSIZE_DELIMITER + 64,
+			GameData.getItemRegistry().getNameForObject(Items.minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.saddle) + Strings.CONFIG_STACKSIZE_DELIMITER + 8,
+			GameData.getItemRegistry().getNameForObject(Items.iron_door) + Strings.CONFIG_STACKSIZE_DELIMITER + 64,
+			GameData.getItemRegistry().getNameForObject(Items.boat) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.chest_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.furnace_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.potionitem) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.tnt_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.hopper_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4
 	};
 
 	public Config(File file) {
