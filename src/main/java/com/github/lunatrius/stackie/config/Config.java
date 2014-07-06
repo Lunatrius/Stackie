@@ -32,7 +32,6 @@ public class Config extends Configuration {
 			GameData.getItemRegistry().getNameForObject(Items.boat) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
 			GameData.getItemRegistry().getNameForObject(Items.chest_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
 			GameData.getItemRegistry().getNameForObject(Items.furnace_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
-			GameData.getItemRegistry().getNameForObject(Items.potionitem) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
 			GameData.getItemRegistry().getNameForObject(Items.tnt_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
 			GameData.getItemRegistry().getNameForObject(Items.hopper_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4,
 			GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + Strings.CONFIG_STACKSIZE_DELIMITER + 4
