@@ -8,7 +8,11 @@ import com.github.lunatrius.stackie.lib.Strings;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
@@ -47,7 +51,7 @@ public class Stackie {
 					String uniqueName = parts[0];
 					int stackSize = MathHelper.clamp_int(Integer.parseInt(parts[1], 10), 1, 64);
 
-					Item item = GameData.itemRegistry.get(uniqueName);
+					Item item = GameData.getItemRegistry().getObject(uniqueName);
 					if (item != null) {
 						item.setMaxStackSize(stackSize);
 					}
