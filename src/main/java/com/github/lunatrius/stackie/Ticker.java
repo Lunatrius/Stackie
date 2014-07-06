@@ -3,7 +3,6 @@ package com.github.lunatrius.stackie;
 import com.github.lunatrius.stackie.config.Config;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -11,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,16 +23,9 @@ public class Ticker {
 
 	private MinecraftServer server = null;
 	private Config config;
-	private Field xpValue;
 	private int ticks = -1;
 
 	public Ticker() {
-		try {
-			this.xpValue = ReflectionHelper.findField(EntityXPOrb.class, "e", "field_70530_e", "xpValue");
-		} catch (Exception e) {
-			Stackie.logger.error("Failed to retrieve the xpValue field!", e);
-			this.xpValue = null;
-		}
 	}
 
 	@SubscribeEvent
@@ -176,8 +167,8 @@ public class Ticker {
 								}
 
 								// set the new experience values
-								this.xpValue.setInt(mcEntityXPOrb, mcEntityXPOrb.getXpValue() + localEntityXPOrb.getXpValue());
-								this.xpValue.setInt(localEntityXPOrb, 0);
+								mcEntityXPOrb.xpValue += localEntityXPOrb.xpValue;
+								localEntityXPOrb.xpValue = 0;
 
 								// the new orb's age is the lowest age of both orbs
 								mcEntityXPOrb.xpOrbAge = Math.min(mcEntityXPOrb.xpOrbAge, localEntityXPOrb.xpOrbAge);
@@ -211,7 +202,7 @@ public class Ticker {
 	private EntityType getType(Entity entity) {
 		if (this.config.stackItems && entity instanceof EntityItem) {
 			return EntityType.ITEM;
-		} else if (this.config.stackExperience && this.xpValue != null && entity instanceof EntityXPOrb) {
+		} else if (this.config.stackExperience && entity instanceof EntityXPOrb) {
 			return EntityType.EXPERIENCEORB;
 		}
 		return EntityType.OTHER;
