@@ -75,7 +75,7 @@ public class StackieCommand extends CommandBase {
 
 	@Override
 	public int compareTo(Object obj) {
-		return 0;
+		return super.compareTo(obj);
 	}
 }
 
