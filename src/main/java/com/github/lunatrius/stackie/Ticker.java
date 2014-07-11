@@ -1,6 +1,6 @@
 package com.github.lunatrius.stackie;
 
-import com.github.lunatrius.stackie.config.Config;
+import com.github.lunatrius.stackie.handler.ConfigurationHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.Entity;
@@ -22,11 +22,7 @@ public class Ticker {
 	}
 
 	private MinecraftServer server = null;
-	private Config config;
 	private int ticks = -1;
-
-	public Ticker() {
-	}
 
 	@SubscribeEvent
 	public void tick(TickEvent.ServerTickEvent event) {
@@ -39,16 +35,12 @@ public class Ticker {
 				processWorlds(this.server.worldServers);
 			}
 
-			this.ticks = this.config.interval;
+			this.ticks = ConfigurationHandler.interval;
 		}
 	}
 
 	public void setServer(MinecraftServer server) {
 		this.server = server;
-	}
-
-	public void setConfig(Config config) {
-		this.config = config;
 	}
 
 	private void processWorlds(WorldServer[] worldServers) {
@@ -200,9 +192,9 @@ public class Ticker {
 	}
 
 	private EntityType getType(Entity entity) {
-		if (this.config.stackItems && entity instanceof EntityItem) {
+		if (ConfigurationHandler.stackItems && entity instanceof EntityItem) {
 			return EntityType.ITEM;
-		} else if (this.config.stackExperience && entity instanceof EntityXPOrb) {
+		} else if (ConfigurationHandler.stackExperience && entity instanceof EntityXPOrb) {
 			return EntityType.EXPERIENCEORB;
 		}
 		return EntityType.OTHER;
@@ -213,7 +205,7 @@ public class Ticker {
 	}
 
 	private boolean isEqual(double a, double b) {
-		return isEqual(a, b, this.config.distance);
+		return isEqual(a, b, ConfigurationHandler.distance);
 	}
 
 	private boolean isEqual(double a, double b, double epsilon) {

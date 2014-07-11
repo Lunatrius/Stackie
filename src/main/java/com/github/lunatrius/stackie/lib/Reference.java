@@ -14,7 +14,7 @@ public class Reference {
 			prop.load(stream);
 			stream.close();
 		} catch (Exception e) {
-			Throwables.propagate(e);
+			throw Throwables.propagate(e);
 		}
 
 		VERSION = prop.getProperty("version.mod");
@@ -27,4 +27,5 @@ public class Reference {
 	public static final String VERSION;
 	public static final String FORGE;
 	public static final String MINECRAFT;
+	public static final String GUI_FACTORY = "com.github.lunatrius.stackie.client.gui.GuiFactory";
 }
