@@ -25,7 +25,7 @@ public class ConfigurationHandler {
 	public static final String STACKSIZE_DELIMITER = "-";
 	public static final String STACKSIZES = "stackSizes";
 	public static final String STACKSIZES_DESC = "A list of uniqueName" + STACKSIZE_DELIMITER + "stackSize mappings. These values will override the default stack sizes.";
-	public static final String LANG_PREFIX = Reference.MODID.toLowerCase();
+	public static final String LANG_PREFIX = Reference.MODID.toLowerCase() + ".config";
 
 	public static final int INTERVAL_MIN = 5;
 	public static final int INTERVAL_MAX = 20 * 60;
@@ -51,11 +51,11 @@ public class ConfigurationHandler {
 			GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + STACKSIZE_DELIMITER + 4
 	};
 
-	private static Property propInterval = null;
-	private static Property propDistance = null;
-	private static Property propStackItems = null;
-	private static Property propStackExperience = null;
-	private static Property propStackSizes = null;
+	public static Property propInterval = null;
+	public static Property propDistance = null;
+	public static Property propStackItems = null;
+	public static Property propStackExperience = null;
+	public static Property propStackSizes = null;
 
 	public static void init(File configFile) {
 		if (configuration == null) {

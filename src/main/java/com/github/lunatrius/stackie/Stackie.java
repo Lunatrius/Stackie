@@ -3,10 +3,13 @@ package com.github.lunatrius.stackie;
 import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.stackie.command.StackieCommand;
 import com.github.lunatrius.stackie.handler.ConfigurationHandler;
+import com.github.lunatrius.stackie.handler.Ticker;
 import com.github.lunatrius.stackie.lib.Reference;
+import com.github.lunatrius.stackie.proxy.CommonProxy;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -22,6 +25,9 @@ public class Stackie {
 	public static Logger logger = null;
 	private Ticker ticker = null;
 
+	@SidedProxy(serverSide = Reference.PROXY_COMMON, clientSide = Reference.PROXY_CLIENT)
+	public static CommonProxy proxy;
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		VersionChecker.registerMod(event.getModMetadata());
@@ -29,6 +35,7 @@ public class Stackie {
 		logger = event.getModLog();
 
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+		proxy.setConfigEntryClasses();
 	}
 
 	@EventHandler
