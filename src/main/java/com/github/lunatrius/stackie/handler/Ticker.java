@@ -52,7 +52,9 @@ public class Ticker {
 				}
 			}
 
-			stackEntities(entityList);
+			if (entityList.size() < ConfigurationHandler.stackLimit) {
+				stackEntities(entityList);
+			}
 		}
 	}
 

@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 
 public class ConfigurationHandler {
 	public static final String CATEGORY = "general";
+	public static final String STACKLIMIT = "stackLimit";
+	public static final String STACKLIMIT_DESC = "If the amount of entities surpasses this number stacking will be disabled (per dimension).";
 	public static final String INTERVAL = "interval";
 	public static final String INTERVAL_DESC = "Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.";
 	public static final String DISTANCE = "distance";
@@ -27,6 +29,8 @@ public class ConfigurationHandler {
 	public static final String STACKSIZES_DESC = "A list of uniqueName" + STACKSIZE_DELIMITER + "stackSize mappings. These values will override the default stack sizes.";
 	public static final String LANG_PREFIX = Reference.MODID.toLowerCase() + ".config";
 
+	public static final int STACKLIMIT_MIN = 100;
+	public static final int STACKLIMIT_MAX = 10000;
 	public static final int INTERVAL_MIN = 5;
 	public static final int INTERVAL_MAX = 20 * 60;
 	public static final double DISTANCE_MIN = 0.01;
@@ -34,6 +38,7 @@ public class ConfigurationHandler {
 
 	public static Configuration configuration;
 
+	public static int stackLimit = 2000;
 	public static int interval = 20;
 	public static double distance = 0.75;
 	public static boolean stackItems = true;
@@ -51,6 +56,7 @@ public class ConfigurationHandler {
 			GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + STACKSIZE_DELIMITER + 4
 	};
 
+	public static Property propStackLimit = null;
 	public static Property propInterval = null;
 	public static Property propDistance = null;
 	public static Property propStackItems = null;
@@ -65,6 +71,10 @@ public class ConfigurationHandler {
 	}
 
 	private static void loadConfiguration() {
+		propStackLimit = configuration.get(CATEGORY, STACKLIMIT, stackLimit, STACKLIMIT_DESC, STACKLIMIT_MIN, STACKLIMIT_MAX);
+		propStackLimit.setLanguageKey(String.format("%s.%s", LANG_PREFIX, STACKLIMIT));
+		stackLimit = propStackLimit.getInt(stackLimit);
+
 		propInterval = configuration.get(CATEGORY, INTERVAL, interval, INTERVAL_DESC, INTERVAL_MIN, INTERVAL_MAX);
 		propInterval.setLanguageKey(String.format("%s.%s", LANG_PREFIX, INTERVAL));
 		interval = propInterval.getInt(interval);
@@ -89,6 +99,11 @@ public class ConfigurationHandler {
 		if (configuration.hasChanged()) {
 			configuration.save();
 		}
+	}
+
+	public static void setStackLimit(int num) {
+		propStackLimit.set(num < STACKLIMIT_MIN ? STACKLIMIT_MIN : (num > STACKLIMIT_MAX ? STACKLIMIT_MAX : num));
+		stackLimit = propStackLimit.getInt(num);
 	}
 
 	public static void setInterval(int num) {

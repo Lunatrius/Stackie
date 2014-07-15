@@ -11,10 +11,12 @@ import java.util.List;
 public class StackieCommand extends CommandBase {
 	public static final String NAME = "stackie";
 	public static final String USAGE = "commands.stackie.usage";
+	public static final String STACKLIMIT = "commands.stackie.stacklimit";
 	public static final String INTERVAL = "commands.stackie.interval";
 	public static final String DISTANCE = "commands.stackie.distance";
 	public static final String STACKITEMS = "commands.stackie.stackitems";
 	public static final String STACKEXPERIENCE = "commands.stackie.stackexperience";
+	public static final String ARG_STACKLIMIT = "setstacklimit";
 	public static final String ARG_INTERVAL = "setinterval";
 	public static final String ARG_DISTANCE = "setdistance";
 	public static final String ARG_STACKITEMS = "stackitems";
@@ -40,7 +42,7 @@ public class StackieCommand extends CommandBase {
 	@Override
 	public List addTabCompletionOptions(ICommandSender commandSender, String[] args) {
 		if (args.length == 1) {
-			return getListOfStringsMatchingLastWord(args, ARG_INTERVAL, ARG_DISTANCE, ARG_STACKITEMS, ARG_STACKEXPERIENCE);
+			return getListOfStringsMatchingLastWord(args, ARG_STACKLIMIT, ARG_INTERVAL, ARG_DISTANCE, ARG_STACKITEMS, ARG_STACKEXPERIENCE);
 		} else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase(ARG_STACKITEMS) || args[0].equalsIgnoreCase(ARG_STACKEXPERIENCE)) {
 				return getListOfStringsMatchingLastWord(args, ARG_TRUE, ARG_FALSE);
@@ -53,7 +55,12 @@ public class StackieCommand extends CommandBase {
 	@Override
 	public void processCommand(ICommandSender commandSender, String[] args) {
 		if (args.length > 0) {
-			if (args[0].equalsIgnoreCase(ARG_INTERVAL)) {
+			if (args[0].equalsIgnoreCase(ARG_STACKLIMIT)) {
+				ConfigurationHandler.setStackLimit(Integer.parseInt(args[1]));
+				commandSender.addChatMessage(new ChatComponentTranslation(STACKLIMIT, ConfigurationHandler.stackLimit));
+				ConfigurationHandler.save();
+				return;
+			} else if (args[0].equalsIgnoreCase(ARG_INTERVAL)) {
 				ConfigurationHandler.setInterval(Integer.parseInt(args[1]));
 				commandSender.addChatMessage(new ChatComponentTranslation(INTERVAL, ConfigurationHandler.interval, ConfigurationHandler.interval / 20.0));
 				ConfigurationHandler.save();
