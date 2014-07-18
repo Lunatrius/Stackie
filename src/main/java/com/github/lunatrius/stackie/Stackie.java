@@ -30,7 +30,7 @@ public class Stackie {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		VersionChecker.registerMod(event.getModMetadata());
+		VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
 
 		logger = event.getModLog();
 
