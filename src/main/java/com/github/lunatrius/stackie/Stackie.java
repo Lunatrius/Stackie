@@ -18,11 +18,9 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
-import org.apache.logging.log4j.Logger;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, guiFactory = Reference.GUI_FACTORY)
 public class Stackie {
-	public static Logger logger = null;
 	private Ticker ticker = null;
 
 	@SidedProxy(serverSide = Reference.PROXY_COMMON, clientSide = Reference.PROXY_CLIENT)
@@ -30,7 +28,7 @@ public class Stackie {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		logger = event.getModLog();
+		Reference.logger = event.getModLog();
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		proxy.setConfigEntryClasses();
 
@@ -59,7 +57,7 @@ public class Stackie {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					logger.error("Invalid format?", e);
+					Reference.logger.error("Invalid format?", e);
 				}
 			}
 		}

@@ -1,6 +1,7 @@
 package com.github.lunatrius.stackie.lib;
 
 import com.google.common.base.Throwables;
+import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -14,7 +15,7 @@ public class Reference {
 			prop.load(stream);
 			stream.close();
 		} catch (Exception e) {
-			throw Throwables.propagate(e);
+			Throwables.propagate(e);
 		}
 
 		VERSION = prop.getProperty("version.mod");
@@ -30,4 +31,6 @@ public class Reference {
 	public static final String PROXY_COMMON = "com.github.lunatrius.stackie.proxy.CommonProxy";
 	public static final String PROXY_CLIENT = "com.github.lunatrius.stackie.proxy.ClientProxy";
 	public static final String GUI_FACTORY = "com.github.lunatrius.stackie.client.gui.GuiFactory";
+
+	public static Logger logger = null;
 }
