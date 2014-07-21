@@ -38,12 +38,12 @@ public class ConfigurationHandler {
 
 	public static Configuration configuration;
 
-	public static int stackLimit = 2000;
-	public static int interval = 20;
-	public static double distance = 0.75;
-	public static boolean stackItems = true;
-	public static boolean stackExperience = true;
-	public static String[] stackSizes = new String[] {
+	public static final int STACKLIMIT_DEFAULT = 2000;
+	public static final int INTERVAL_DEFAULT = 20;
+	public static final double DISTANCE_DEFAULT = 0.75;
+	public static final boolean STACKITEMS_DEFAULT = true;
+	public static final boolean STACKEXPERIENCE_DEFAULT = true;
+	public static final String[] STACKSIZES_DEFAULT = new String[] {
 			GameData.getItemRegistry().getNameForObject(Items.wooden_door) + STACKSIZE_DELIMITER + 64,
 			GameData.getItemRegistry().getNameForObject(Items.minecart) + STACKSIZE_DELIMITER + 4,
 			GameData.getItemRegistry().getNameForObject(Items.saddle) + STACKSIZE_DELIMITER + 8,
@@ -55,6 +55,13 @@ public class ConfigurationHandler {
 			GameData.getItemRegistry().getNameForObject(Items.hopper_minecart) + STACKSIZE_DELIMITER + 4,
 			GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + STACKSIZE_DELIMITER + 4
 	};
+
+	public static int stackLimit = STACKLIMIT_DEFAULT;
+	public static int interval = INTERVAL_DEFAULT;
+	public static double distance = DISTANCE_DEFAULT;
+	public static boolean stackItems = STACKITEMS_DEFAULT;
+	public static boolean stackExperience = STACKEXPERIENCE_DEFAULT;
+	public static String[] stackSizes = STACKSIZES_DEFAULT;
 
 	public static Property propStackLimit = null;
 	public static Property propInterval = null;
@@ -71,27 +78,27 @@ public class ConfigurationHandler {
 	}
 
 	private static void loadConfiguration() {
-		propStackLimit = configuration.get(CATEGORY, STACKLIMIT, stackLimit, STACKLIMIT_DESC, STACKLIMIT_MIN, STACKLIMIT_MAX);
+		propStackLimit = configuration.get(CATEGORY, STACKLIMIT, STACKLIMIT_DEFAULT, STACKLIMIT_DESC, STACKLIMIT_MIN, STACKLIMIT_MAX);
 		propStackLimit.setLanguageKey(String.format("%s.%s", LANG_PREFIX, STACKLIMIT));
-		stackLimit = propStackLimit.getInt(stackLimit);
+		stackLimit = propStackLimit.getInt(STACKLIMIT_DEFAULT);
 
-		propInterval = configuration.get(CATEGORY, INTERVAL, interval, INTERVAL_DESC, INTERVAL_MIN, INTERVAL_MAX);
+		propInterval = configuration.get(CATEGORY, INTERVAL, INTERVAL_DEFAULT, INTERVAL_DESC, INTERVAL_MIN, INTERVAL_MAX);
 		propInterval.setLanguageKey(String.format("%s.%s", LANG_PREFIX, INTERVAL));
-		interval = propInterval.getInt(interval);
+		interval = propInterval.getInt(INTERVAL_DEFAULT);
 
-		propDistance = configuration.get(CATEGORY, DISTANCE, distance, DISTANCE_DESC, DISTANCE_MIN, DISTANCE_MAX);
+		propDistance = configuration.get(CATEGORY, DISTANCE, DISTANCE_DEFAULT, DISTANCE_DESC, DISTANCE_MIN, DISTANCE_MAX);
 		propDistance.setLanguageKey(String.format("%s.%s", LANG_PREFIX, DISTANCE));
-		distance = propDistance.getDouble(distance);
+		distance = propDistance.getDouble(DISTANCE_DEFAULT);
 
-		propStackItems = configuration.get(CATEGORY, STACKITEMS, stackItems, STACKITEMS_DESC);
+		propStackItems = configuration.get(CATEGORY, STACKITEMS, STACKITEMS_DEFAULT, STACKITEMS_DESC);
 		propStackItems.setLanguageKey(String.format("%s.%s", LANG_PREFIX, STACKITEMS));
-		stackItems = propStackItems.getBoolean(stackItems);
+		stackItems = propStackItems.getBoolean(STACKITEMS_DEFAULT);
 
-		propStackExperience = configuration.get(CATEGORY, STACKEXPERIENCE, stackExperience, STACKEXPERIENCE_DESC);
+		propStackExperience = configuration.get(CATEGORY, STACKEXPERIENCE, STACKEXPERIENCE_DEFAULT, STACKEXPERIENCE_DESC);
 		propStackExperience.setLanguageKey(String.format("%s.%s", LANG_PREFIX, STACKEXPERIENCE));
-		stackExperience = propStackExperience.getBoolean(stackExperience);
+		stackExperience = propStackExperience.getBoolean(STACKEXPERIENCE_DEFAULT);
 
-		propStackSizes = configuration.get(CATEGORY, STACKSIZES, stackSizes, STACKSIZES_DESC);
+		propStackSizes = configuration.get(CATEGORY, STACKSIZES, STACKSIZES_DEFAULT, STACKSIZES_DESC);
 		propStackSizes.setLanguageKey(String.format("%s.%s", LANG_PREFIX, STACKSIZES));
 		propStackSizes.setValidationPattern(Pattern.compile("[A-Za-z0-9_:]+-\\d+"));
 		stackSizes = propStackSizes.getStringList();
