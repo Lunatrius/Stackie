@@ -1,12 +1,9 @@
 package com.github.lunatrius.stackie;
 
 import com.github.lunatrius.core.version.VersionChecker;
-import com.github.lunatrius.stackie.command.StackieCommand;
 import com.github.lunatrius.stackie.handler.ConfigurationHandler;
-import com.github.lunatrius.stackie.handler.Ticker;
 import com.github.lunatrius.stackie.lib.Reference;
 import com.github.lunatrius.stackie.proxy.CommonProxy;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -21,9 +18,7 @@ import net.minecraft.util.MathHelper;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, guiFactory = Reference.GUI_FACTORY)
 public class Stackie {
-	private Ticker ticker = null;
-
-	@SidedProxy(serverSide = Reference.PROXY_COMMON, clientSide = Reference.PROXY_CLIENT)
+	@SidedProxy(serverSide = Reference.PROXY_SERVER, clientSide = Reference.PROXY_CLIENT)
 	public static CommonProxy proxy;
 
 	@EventHandler
@@ -37,9 +32,7 @@ public class Stackie {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		this.ticker = new Ticker();
-
-		FMLCommonHandler.instance().bus().register(this.ticker);
+		proxy.registerEvents();
 	}
 
 	@EventHandler
@@ -65,12 +58,11 @@ public class Stackie {
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
-		this.ticker.setServer(event.getServer());
-		event.registerServerCommand(new StackieCommand());
+		proxy.serverStarting(event);
 	}
 
 	@EventHandler
 	public void serverStopping(FMLServerStoppingEvent event) {
-		this.ticker.setServer(null);
+		proxy.serverStopping(event);
 	}
 }

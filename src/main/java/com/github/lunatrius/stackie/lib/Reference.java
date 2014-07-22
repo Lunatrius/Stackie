@@ -28,7 +28,7 @@ public class Reference {
 	public static final String VERSION;
 	public static final String FORGE;
 	public static final String MINECRAFT;
-	public static final String PROXY_COMMON = "com.github.lunatrius.stackie.proxy.CommonProxy";
+	public static final String PROXY_SERVER = "com.github.lunatrius.stackie.proxy.ServerProxy";
 	public static final String PROXY_CLIENT = "com.github.lunatrius.stackie.proxy.ClientProxy";
 	public static final String GUI_FACTORY = "com.github.lunatrius.stackie.client.gui.GuiFactory";
 
