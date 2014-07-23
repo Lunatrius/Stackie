@@ -2,8 +2,8 @@ package com.github.lunatrius.stackie;
 
 import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.stackie.handler.ConfigurationHandler;
-import com.github.lunatrius.stackie.lib.Reference;
 import com.github.lunatrius.stackie.proxy.CommonProxy;
+import com.github.lunatrius.stackie.reference.Reference;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -16,7 +16,7 @@ import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
 
-@Mod(modid = Reference.MODID, name = Reference.NAME, guiFactory = Reference.GUI_FACTORY)
+@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY)
 public class Stackie {
 	@SidedProxy(serverSide = Reference.PROXY_SERVER, clientSide = Reference.PROXY_CLIENT)
 	public static CommonProxy proxy;

@@ -1,7 +1,7 @@
 package com.github.lunatrius.stackie.client.gui;
 
 import com.github.lunatrius.stackie.handler.ConfigurationHandler;
-import com.github.lunatrius.stackie.lib.Reference;
+import com.github.lunatrius.stackie.reference.Reference;
 import cpw.mods.fml.client.config.GuiConfig;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;

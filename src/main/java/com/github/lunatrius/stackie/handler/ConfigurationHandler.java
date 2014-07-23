@@ -1,7 +1,7 @@
 package com.github.lunatrius.stackie.handler;
 
 
-import com.github.lunatrius.stackie.lib.Reference;
+import com.github.lunatrius.stackie.reference.Reference;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameData;
