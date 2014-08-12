@@ -187,16 +187,13 @@ public class Ticker {
 		this.weightL = entityExpOrbL.getXpValue();
 		this.weightR = entityExpOrbR.getXpValue();
 
-		if (this.weightL + this.weightR > MAXIMUM_EXPERIENCE) {
-			return false;
-		}
-
-		entityExpOrbL.xpValue += entityExpOrbR.xpValue;
-		entityExpOrbR.xpValue = 0;
+		final int experienceIn = Math.min(MAXIMUM_EXPERIENCE - entityExpOrbL.xpValue, entityExpOrbR.xpValue);
+		entityExpOrbL.xpValue += experienceIn;
+		entityExpOrbR.xpValue -= experienceIn;
 
 		entityExpOrbL.xpOrbAge = Math.min(entityExpOrbL.xpOrbAge, entityExpOrbR.xpOrbAge);
 
-		return true;
+		return entityExpOrbR.xpValue <= 0;
 	}
 
 	private EntityType getType(Entity entity) {
