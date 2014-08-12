@@ -30,7 +30,7 @@ public class StackiePlugin extends JavaPlugin {
 			public void run() {
 				Stackie.instance.processWorlds(StackiePlugin.this.server.getWorlds());
 			}
-		}, 0, 20);
+		}, 0, stackie.interval);
 	}
 
 	@Override
