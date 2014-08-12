@@ -22,6 +22,7 @@ public class StackiePlugin extends JavaPlugin {
 		stackie.distance = this.getConfig().getDouble("distance", stackie.distance);
 		stackie.stackItems = this.getConfig().getBoolean("stack.items", stackie.stackItems);
 		stackie.stackExperience = this.getConfig().getBoolean("stack.experience", stackie.stackExperience);
+		stackie.stackLimit = this.getConfig().getInt("stackLimit", stackie.stackLimit);
 
 		this.server = getServer();
 		this.scheduler = this.server.getScheduler();

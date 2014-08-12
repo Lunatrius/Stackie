@@ -16,6 +16,7 @@ public class Stackie {
 	public double distance = 0.75;
 	public boolean stackItems = false;
 	public boolean stackExperience = true;
+	public int stackLimit = 2000;
 
 	private Stackie() {
 	}
@@ -36,7 +37,9 @@ public class Stackie {
 				}
 			}
 
-			stackEntities(entityList);
+			if (entityList.size() < this.stackLimit) {
+				stackEntities(entityList);
+			}
 		}
 	}
 

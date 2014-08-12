@@ -10,3 +10,6 @@ distance: 0.75
 stack:
     items: true
     experience: true
+
+# disable stacking for dimensions with more than this many entities
+stackLimit: 2000
