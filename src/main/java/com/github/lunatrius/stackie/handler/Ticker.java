@@ -1,5 +1,6 @@
 package com.github.lunatrius.stackie.handler;
 
+import com.github.lunatrius.stackie.reference.Reference;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.Entity;
@@ -11,6 +12,7 @@ import net.minecraft.world.WorldServer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Ticker {
 	public static final int MAXIMUM_STACKSIZE = 2048;
@@ -22,6 +24,9 @@ public class Ticker {
 
 	private MinecraftServer server = null;
 	private int ticks = -1;
+
+	private double weightL = -1;
+	private double weightR = -1;
 
 	@SubscribeEvent
 	public void tick(TickEvent.ServerTickEvent event) {
@@ -52,144 +57,146 @@ public class Ticker {
 				}
 			}
 
-			if (entityList.size() < ConfigurationHandler.stackLimit) {
-				stackEntities(entityList);
+			if (entityList.size() >= 2 && entityList.size() <= ConfigurationHandler.stackLimit) {
+				try {
+					stackEntities(entityList);
+				} catch (Exception e) {
+					Reference.logger.error("Could not stack entities!", e);
+				}
 			}
 		}
 	}
 
 	private void stackEntities(List<Entity> entityList) {
-		EntityType mcType = EntityType.OTHER;
-		Entity mcEntity = null;
-		EntityItem mcEntityItem = null;
-		ItemStack mcItemStack = null;
-		EntityXPOrb mcEntityXPOrb = null;
-		double mcWeight = -1;
+		final ListIterator<Entity> iteratorL = entityList.listIterator();
+		while (iteratorL.hasNext()) {
+			final Entity entityL = iteratorL.next();
 
-		EntityType localType = EntityType.OTHER;
-		Entity localEntity = null;
-		EntityItem localEntityItem = null;
-		ItemStack localItemStack = null;
-		EntityXPOrb localEntityXPOrb = null;
-		double localWeight = -1;
+			if (entityL.isDead) {
+				continue;
+			}
 
-		boolean merged = false;
-		double totalWeight = -1;
+			final ListIterator<Entity> iteratorR = entityList.listIterator(iteratorL.nextIndex());
+			while (iteratorR.hasNext()) {
+				final Entity entityR = iteratorR.next();
 
-		try {
-			for (int i = 0; i < entityList.size() - 1; i++) {
-				mcEntity = entityList.get(i);
-				if (mcEntity.isDead) {
+				if (entityR.isDead) {
 					continue;
 				}
 
-				mcType = getType(mcEntity);
-
-				switch (mcType) {
-				case ITEM:
-					mcEntityItem = (EntityItem) mcEntity;
-					mcItemStack = mcEntityItem.getEntityItem();
-
-					if (mcItemStack == null || !mcItemStack.isStackable() || mcItemStack.stackSize <= 0) {
-						continue;
-					}
-					break;
-
-				case EXPERIENCEORB:
-					mcEntityXPOrb = (EntityXPOrb) mcEntity;
-					break;
-				}
-
-				for (int j = i + 1; j < entityList.size(); j++) {
-					localEntity = entityList.get(j);
-					if (localEntity.isDead) {
-						continue;
-					}
-
-					localType = getType(localEntity);
-
-					if (mcType == localType) {
-						if (!isEqualPosition(mcEntity, localEntity)) {
-							continue;
-						}
-
-						merged = false;
-
-						switch (mcType) {
-						case ITEM:
-							localEntityItem = (EntityItem) localEntity;
-							localItemStack = localEntityItem.getEntityItem();
-
-							if (localItemStack == null) {
-								continue;
-							} else if (mcItemStack.getItem() != localItemStack.getItem()) {
-								continue;
-							} else if (mcItemStack.stackTagCompound != null || localItemStack.stackTagCompound != null) {
-								continue;
-							} else if (mcItemStack.getItemDamage() != localItemStack.getItemDamage()) {
-								continue;
-							}
-
-							mcWeight = mcItemStack.stackSize;
-							localWeight = localItemStack.stackSize;
-
-							// move the items from one stack to the other
-							int itemsIn = Math.min(MAXIMUM_STACKSIZE - mcItemStack.stackSize, localItemStack.stackSize);
-							mcItemStack.stackSize += itemsIn;
-							localItemStack.stackSize -= itemsIn;
-
-							mcEntityItem.setEntityItemStack(mcItemStack);
-							localEntityItem.setEntityItemStack(localItemStack);
-
-							mcEntityItem.age = Math.min(mcEntityItem.age, localEntityItem.age);
-
-							if (localItemStack.stackSize <= 0) {
-								merged = true;
-							}
-							break;
-
-						case EXPERIENCEORB:
-							localEntityXPOrb = (EntityXPOrb) localEntity;
-
-							try {
-								mcWeight = mcEntityXPOrb.getXpValue();
-								localWeight = localEntityXPOrb.getXpValue();
-
-								if (mcWeight + localWeight > MAXIMUM_EXPERIENCE) {
-									continue;
-								}
-
-								// set the new experience values
-								mcEntityXPOrb.xpValue += localEntityXPOrb.xpValue;
-								localEntityXPOrb.xpValue = 0;
-
-								// the new orb's age is the lowest age of both orbs
-								mcEntityXPOrb.xpOrbAge = Math.min(mcEntityXPOrb.xpOrbAge, localEntityXPOrb.xpOrbAge);
-
-								merged = true;
-							} catch (Exception ex) {
-							}
-							break;
-						}
-
-						if (merged) {
-							localEntity.setDead();
-
-							totalWeight = mcWeight + localWeight;
-							mcWeight /= totalWeight;
-							localWeight /= totalWeight;
-
-							mcEntity.setPosition(mcEntity.posX * mcWeight + localEntity.posX * localWeight, mcEntity.posY * mcWeight + localEntity.posY * localWeight, mcEntity.posZ * mcWeight + localEntity.posZ * localWeight);
-
-							mcEntity.motionX = mcEntity.motionX * mcWeight + localEntity.motionX * localWeight;
-							mcEntity.motionY = mcEntity.motionY * mcWeight + localEntity.motionY * localWeight;
-							mcEntity.motionZ = mcEntity.motionZ * mcWeight + localEntity.motionZ * localWeight;
-						}
-					}
-				}
+				stackEntities(entityL, entityR);
 			}
-		} catch (Exception e) {
 		}
+	}
+
+	private boolean stackEntities(Entity entityL, Entity entityR) {
+		final EntityType typeL = getType(entityL);
+		final EntityType typeR = getType(entityR);
+
+		if (typeL == typeR && isEqualPosition(entityL, entityR)) {
+			boolean merged = false;
+
+			switch (typeL) {
+			case ITEM:
+				merged = stackItems((EntityItem) entityL, (EntityItem) entityR);
+				break;
+
+			case EXPERIENCEORB:
+				merged = stackExperience((EntityXPOrb) entityL, (EntityXPOrb) entityR);
+				break;
+
+			default:
+				return false;
+			}
+
+			if (merged) {
+				entityR.setDead();
+
+				final double totalWeight = this.weightL + this.weightR;
+				this.weightL /= totalWeight;
+				this.weightR /= totalWeight;
+
+				final double x = entityL.posX * this.weightL + entityR.posX * this.weightR;
+				final double y = entityL.posY * this.weightL + entityR.posY * this.weightR;
+				final double z = entityL.posZ * this.weightL + entityR.posZ * this.weightR;
+				entityL.setPosition(x, y, z);
+
+				entityL.motionX = entityL.motionX * this.weightL + entityR.motionX * this.weightR;
+				entityL.motionY = entityL.motionY * this.weightL + entityR.motionY * this.weightR;
+				entityL.motionZ = entityL.motionZ * this.weightL + entityR.motionZ * this.weightR;
+			}
+
+			return merged;
+		}
+
+		return false;
+	}
+
+	private boolean stackItems(EntityItem entityItemL, EntityItem entityItemR) {
+		final ItemStack itemStackL = entityItemL.getEntityItem();
+		final ItemStack itemStackR = entityItemR.getEntityItem();
+
+		if (!areItemStacksValid(itemStackL, itemStackR)) {
+			return false;
+		}
+
+		this.weightL = itemStackL.stackSize;
+		this.weightR = itemStackR.stackSize;
+
+		final int itemsIn = Math.min(MAXIMUM_STACKSIZE - itemStackL.stackSize, itemStackR.stackSize);
+		itemStackL.stackSize += itemsIn;
+		itemStackR.stackSize -= itemsIn;
+
+		entityItemL.setEntityItemStack(itemStackL);
+		entityItemR.setEntityItemStack(itemStackR);
+
+		entityItemL.age = Math.min(entityItemL.age, entityItemR.age);
+
+		return itemStackR.stackSize <= 0;
+	}
+
+	private boolean areItemStacksValid(ItemStack itemStackL, ItemStack itemStackR) {
+		if (itemStackL == null || itemStackR == null) {
+			return false;
+		}
+
+		if (!itemStackL.isStackable()) {
+			return false;
+		}
+
+		if (itemStackL.stackSize <= 0 || itemStackR.stackSize <= 0) {
+			return false;
+		}
+
+		if (itemStackL.getItem() != itemStackR.getItem()) {
+			return false;
+		}
+
+		if (itemStackL.getItemDamage() != itemStackR.getItemDamage()) {
+			return false;
+		}
+
+		if (itemStackL.stackTagCompound == null && itemStackR.stackTagCompound == null) {
+			return true;
+		}
+
+		return itemStackL.stackTagCompound != null && itemStackL.stackTagCompound.equals(itemStackR.stackTagCompound);
+	}
+
+	private boolean stackExperience(EntityXPOrb entityExpOrbL, EntityXPOrb entityExpOrbR) {
+		this.weightL = entityExpOrbL.getXpValue();
+		this.weightR = entityExpOrbR.getXpValue();
+
+		if (this.weightL + this.weightR > MAXIMUM_EXPERIENCE) {
+			return false;
+		}
+
+		entityExpOrbL.xpValue += entityExpOrbR.xpValue;
+		entityExpOrbR.xpValue = 0;
+
+		entityExpOrbL.xpOrbAge = Math.min(entityExpOrbL.xpOrbAge, entityExpOrbR.xpOrbAge);
+
+		return true;
 	}
 
 	private EntityType getType(Entity entity) {
