@@ -34,6 +34,9 @@ group = "com.github.lunatrius"
 version = "${config.version.bukkit}-${pluginversion}"
 archivesBaseName = config.plugin.id
 
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
 repositories {
     mavenCentral()
     maven {
