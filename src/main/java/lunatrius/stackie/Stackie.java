@@ -10,7 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Stackie {
-	public static Stackie instance = new Stackie();
+	public static final int MAXIMUM_STACKSIZE = 2048;
+	public static final Stackie instance = new Stackie();
+
+	private enum EntityType {
+		ITEM, EXPERIENCEORB, OTHER
+	}
 
 	public int interval = 20;
 	public double distance = 0.75;
@@ -31,9 +36,9 @@ public class Stackie {
 			entityList.clear();
 
 			List<Entity> tempList = world.getEntities();
-			for (int i = 0; i < tempList.size(); i++) {
-				if (getType(tempList.get(i)) != -1) {
-					entityList.add(tempList.get(i));
+			for (Entity entity : tempList) {
+				if (getType(entity) != EntityType.OTHER) {
+					entityList.add(entity);
 				}
 			}
 
@@ -44,14 +49,14 @@ public class Stackie {
 	}
 
 	private void stackEntities(List<Entity> entityList) {
-		int mcType = -1;
+		EntityType mcType;
 		Entity mcEntity = null;
 		Item mcItem = null;
 		ItemStack mcItemStack = null;
 		ExperienceOrb mcExperienceOrb = null;
 		double mcWeight = -1;
 
-		int localType = -1;
+		EntityType localType;
 		Entity localEntity = null;
 		Item localItem = null;
 		ItemStack localItemStack = null;
@@ -73,8 +78,7 @@ public class Stackie {
 				mcType = getType(mcEntity);
 
 				switch (mcType) {
-				// Item
-				case 0:
+				case ITEM:
 					mcItem = (Item) mcEntity;
 					mcItemStack = mcItem.getItemStack();
 
@@ -84,8 +88,7 @@ public class Stackie {
 					}
 					break;
 
-				// ExperienceOrb
-				case 1:
+				case EXPERIENCEORB:
 					mcExperienceOrb = (ExperienceOrb) mcEntity;
 					break;
 				}
@@ -111,8 +114,7 @@ public class Stackie {
 						merged = false;
 
 						switch (mcType) {
-						// Item
-						case 0:
+						case ITEM:
 							localItem = (Item) localEntity;
 							localItemStack = localItem.getItemStack();
 
@@ -128,7 +130,7 @@ public class Stackie {
 							}
 
 							// move the items from one stack to the other
-							int itemsIn = Math.min(2048 - mcItemStack.getAmount(), localItemStack.getAmount());
+							int itemsIn = Math.min(MAXIMUM_STACKSIZE - mcItemStack.getAmount(), localItemStack.getAmount());
 							mcItemStack.setAmount(mcItemStack.getAmount() + itemsIn);
 							localItemStack.setAmount(localItemStack.getAmount() - itemsIn);
 
@@ -141,8 +143,7 @@ public class Stackie {
 							}
 							break;
 
-						// ExperienceOrb
-						case 1:
+						case EXPERIENCEORB:
 							localExperienceOrb = (ExperienceOrb) localEntity;
 
 							// set the experience values
@@ -178,16 +179,15 @@ public class Stackie {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
-	private int getType(Entity entity) {
+	private EntityType getType(Entity entity) {
 		if (this.stackItems && entity instanceof Item) {
-			return 0;
+			return EntityType.ITEM;
 		} else if (this.stackExperience && entity instanceof ExperienceOrb) {
-			return 1;
+			return EntityType.EXPERIENCEORB;
 		}
-		return -1;
+		return EntityType.OTHER;
 	}
 }
