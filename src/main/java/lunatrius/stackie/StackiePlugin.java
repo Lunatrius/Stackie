@@ -28,7 +28,7 @@ public class StackiePlugin extends JavaPlugin {
 		this.taskId = this.scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
 			@Override
 			public void run() {
-				Stackie.instance.stackEntities(StackiePlugin.this.server.getWorlds());
+				Stackie.instance.processWorlds(StackiePlugin.this.server.getWorlds());
 			}
 		}, 0, 20);
 	}

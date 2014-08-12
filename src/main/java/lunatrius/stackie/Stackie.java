@@ -21,7 +21,7 @@ public class Stackie {
 	}
 
 	@SuppressWarnings("null")
-	public void stackEntities(List<World> list) {
+	public void processWorlds(List<World> list) {
 		// create a new array list
 		List<Entity> entityList = new ArrayList<Entity>();
 
@@ -36,142 +36,146 @@ public class Stackie {
 				}
 			}
 
-			int mcType = -1;
-			Entity mcEntity = null;
-			Item mcItem = null;
-			ItemStack mcItemStack = null;
-			ExperienceOrb mcExperienceOrb = null;
-			double mcWeight = -1;
+			stackEntities(entityList);
+		}
+	}
 
-			int localType = -1;
-			Entity localEntity = null;
-			Item localItem = null;
-			ItemStack localItemStack = null;
-			ExperienceOrb localExperienceOrb = null;
-			double localWeight = -1;
+	private void stackEntities(List<Entity> entityList) {
+		int mcType = -1;
+		Entity mcEntity = null;
+		Item mcItem = null;
+		ItemStack mcItemStack = null;
+		ExperienceOrb mcExperienceOrb = null;
+		double mcWeight = -1;
 
-			boolean merged = false;
-			double totalWeight = -1;
+		int localType = -1;
+		Entity localEntity = null;
+		Item localItem = null;
+		ItemStack localItemStack = null;
+		ExperienceOrb localExperienceOrb = null;
+		double localWeight = -1;
 
-			try {
-				for (int i = 0; i < entityList.size() - 1; i++) {
+		boolean merged = false;
+		double totalWeight = -1;
+
+		try {
+			for (int i = 0; i < entityList.size() - 1; i++) {
+				// if the entity is dead skip it
+				mcEntity = entityList.get(i);
+				if (mcEntity.isDead()) {
+					continue;
+				}
+
+				// get entity's type
+				mcType = getType(mcEntity);
+
+				switch (mcType) {
+				// Item
+				case 0:
+					mcItem = (Item) mcEntity;
+					mcItemStack = mcItem.getItemStack();
+
+					// if the entity is not stackable, is at the maximum stack limit or if it's at 0 skip it
+					if (mcItemStack == null || mcItemStack.getMaxStackSize() <= 1 || mcItemStack.getAmount() <= 0) {
+						continue;
+					}
+					break;
+
+				// ExperienceOrb
+				case 1:
+					mcExperienceOrb = (ExperienceOrb) mcEntity;
+					break;
+				}
+
+				for (int j = i + 1; j < entityList.size(); j++) {
 					// if the entity is dead skip it
-					mcEntity = entityList.get(i);
-					if (mcEntity.isDead()) {
+					localEntity = entityList.get(j);
+					if (localEntity.isDead()) {
 						continue;
 					}
 
 					// get entity's type
-					mcType = getType(mcEntity);
+					localType = getType(localEntity);
 
-					switch (mcType) {
-					// Item
-					case 0:
-						mcItem = (Item) mcEntity;
-						mcItemStack = mcItem.getItemStack();
-
-						// if the entity is not stackable, is at the maximum stack limit or if it's at 0 skip it
-						if (mcItemStack == null || mcItemStack.getMaxStackSize() <= 1 || mcItemStack.getAmount() <= 0) {
-							continue;
-						}
-						break;
-
-					// ExperienceOrb
-					case 1:
-						mcExperienceOrb = (ExperienceOrb) mcEntity;
-						break;
-					}
-
-					for (int j = i + 1; j < entityList.size(); j++) {
-						// if the entity is dead skip it
-						localEntity = entityList.get(j);
-						if (localEntity.isDead()) {
+					// entity types match
+					if (mcType == localType) {
+						// if positions differ skip it
+						if (mcEntity.getLocation().distance(localEntity.getLocation()) > this.distance) {
 							continue;
 						}
 
-						// get entity's type
-						localType = getType(localEntity);
+						// reset the merged flag
+						merged = false;
 
-						// entity types match
-						if (mcType == localType) {
-							// if positions differ skip it
-							if (mcEntity.getLocation().distance(localEntity.getLocation()) > this.distance) {
+						switch (mcType) {
+						// Item
+						case 0:
+							localItem = (Item) localEntity;
+							localItemStack = localItem.getItemStack();
+
+							// if item ID aren't equal, items have a tag compound, position differs or the damage isn't equal skip it
+							if (localItemStack == null) {
+								continue;
+							} else if (mcItemStack.getType() != localItemStack.getType()) {
+								continue;
+							} else if (mcItemStack.hasItemMeta() || localItemStack.hasItemMeta()) {
+								continue;
+							} else if (mcItemStack.getDurability() != localItemStack.getDurability()) {
 								continue;
 							}
 
-							// reset the merged flag
-							merged = false;
+							// move the items from one stack to the other
+							int itemsIn = Math.min(2048 - mcItemStack.getAmount(), localItemStack.getAmount());
+							mcItemStack.setAmount(mcItemStack.getAmount() + itemsIn);
+							localItemStack.setAmount(localItemStack.getAmount() - itemsIn);
 
-							switch (mcType) {
-							// Item
-							case 0:
-								localItem = (Item) localEntity;
-								localItemStack = localItem.getItemStack();
+							// the new stack's age is the lowest age of both stacks
+							mcItem.setTicksLived(Math.max(1, Math.min(mcItem.getTicksLived(), localItem.getTicksLived())));
 
-								// if item ID aren't equal, items have a tag compound, position differs or the damage isn't equal skip it
-								if (localItemStack == null) {
-									continue;
-								} else if (mcItemStack.getType() != localItemStack.getType()) {
-									continue;
-								} else if (mcItemStack.hasItemMeta() || localItemStack.hasItemMeta()) {
-									continue;
-								} else if (mcItemStack.getDurability() != localItemStack.getDurability()) {
-									continue;
-								}
-
-								// move the items from one stack to the other
-								int itemsIn = Math.min(2048 - mcItemStack.getAmount(), localItemStack.getAmount());
-								mcItemStack.setAmount(mcItemStack.getAmount() + itemsIn);
-								localItemStack.setAmount(localItemStack.getAmount() - itemsIn);
-
-								// the new stack's age is the lowest age of both stacks
-								mcItem.setTicksLived(Math.max(1, Math.min(mcItem.getTicksLived(), localItem.getTicksLived())));
-
-								// if the stack size is bellow or equal to 0 the entities have merged
-								if (localItemStack.getAmount() <= 0) {
-									merged = true;
-								}
-								break;
-
-							// ExperienceOrb
-							case 1:
-								localExperienceOrb = (ExperienceOrb) localEntity;
-
-								// set the experience values
-								mcExperienceOrb.setExperience(mcExperienceOrb.getExperience() + localExperienceOrb.getExperience());
-								localExperienceOrb.setExperience(0);
-
-								// the new orb's age is the lowest age of both orbs
-								mcExperienceOrb.setTicksLived(Math.max(1, Math.min(mcExperienceOrb.getTicksLived(), localExperienceOrb.getTicksLived())));
-
-								// the entities have been merged
+							// if the stack size is bellow or equal to 0 the entities have merged
+							if (localItemStack.getAmount() <= 0) {
 								merged = true;
-								break;
 							}
+							break;
 
-							if (merged) {
-								// the entity is dead
-								localEntity.remove();
+						// ExperienceOrb
+						case 1:
+							localExperienceOrb = (ExperienceOrb) localEntity;
 
-								// sum up the weights
-								totalWeight = mcWeight + localWeight;
+							// set the experience values
+							mcExperienceOrb.setExperience(mcExperienceOrb.getExperience() + localExperienceOrb.getExperience());
+							localExperienceOrb.setExperience(0);
 
-								// set the new weights
-								mcWeight /= totalWeight;
-								localWeight /= totalWeight;
+							// the new orb's age is the lowest age of both orbs
+							mcExperienceOrb.setTicksLived(Math.max(1, Math.min(mcExperienceOrb.getTicksLived(), localExperienceOrb.getTicksLived())));
 
-								// set the new position to the average of the merged entities
-								mcEntity.teleport(mcEntity.getLocation().multiply(mcWeight).add(localEntity.getLocation().multiply(localWeight)));
+							// the entities have been merged
+							merged = true;
+							break;
+						}
 
-								// set the new velocity to the average of the merged entities
-								mcEntity.setVelocity(mcEntity.getVelocity().multiply(mcWeight).add(localEntity.getVelocity().multiply(localWeight)));
-							}
+						if (merged) {
+							// the entity is dead
+							localEntity.remove();
+
+							// sum up the weights
+							totalWeight = mcWeight + localWeight;
+
+							// set the new weights
+							mcWeight /= totalWeight;
+							localWeight /= totalWeight;
+
+							// set the new position to the average of the merged entities
+							mcEntity.teleport(mcEntity.getLocation().multiply(mcWeight).add(localEntity.getLocation().multiply(localWeight)));
+
+							// set the new velocity to the average of the merged entities
+							mcEntity.setVelocity(mcEntity.getVelocity().multiply(mcWeight).add(localEntity.getVelocity().multiply(localWeight)));
 						}
 					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
