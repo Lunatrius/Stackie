@@ -1,6 +1,7 @@
 package com.github.lunatrius.stackie.handler;
 
 
+import com.github.lunatrius.stackie.reference.Names;
 import com.github.lunatrius.stackie.reference.Reference;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -13,22 +14,6 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public class ConfigurationHandler {
-	public static final String CATEGORY = "general";
-	public static final String STACKLIMIT = "stackLimit";
-	public static final String STACKLIMIT_DESC = "If the amount of entities surpasses this number stacking will be disabled (per dimension).";
-	public static final String INTERVAL = "interval";
-	public static final String INTERVAL_DESC = "Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.";
-	public static final String DISTANCE = "distance";
-	public static final String DISTANCE_DESC = "Maximum distance between items/experience orbs that can be still stacked (relative to block size).";
-	public static final String STACKITEMS = "stackItems";
-	public static final String STACKITEMS_DESC = "Should it stack items?";
-	public static final String STACKEXPERIENCE = "stackExperience";
-	public static final String STACKEXPERIENCE_DESC = "Should it stack experience orbs?";
-	public static final String STACKSIZE_DELIMITER = "-";
-	public static final String STACKSIZES = "stackSizes";
-	public static final String STACKSIZES_DESC = "A list of uniqueName" + STACKSIZE_DELIMITER + "stackSize mappings. These values will override the default stack sizes.";
-	public static final String LANG_PREFIX = Reference.MODID.toLowerCase() + ".config";
-
 	public static final int STACKLIMIT_MIN = 100;
 	public static final int STACKLIMIT_MAX = 10000;
 	public static final int INTERVAL_MIN = 5;
@@ -44,16 +29,16 @@ public class ConfigurationHandler {
 	public static final boolean STACKITEMS_DEFAULT = true;
 	public static final boolean STACKEXPERIENCE_DEFAULT = true;
 	public static final String[] STACKSIZES_DEFAULT = new String[] {
-			GameData.getItemRegistry().getNameForObject(Items.wooden_door) + STACKSIZE_DELIMITER + 64,
-			GameData.getItemRegistry().getNameForObject(Items.minecart) + STACKSIZE_DELIMITER + 4,
-			GameData.getItemRegistry().getNameForObject(Items.saddle) + STACKSIZE_DELIMITER + 8,
-			GameData.getItemRegistry().getNameForObject(Items.iron_door) + STACKSIZE_DELIMITER + 64,
-			GameData.getItemRegistry().getNameForObject(Items.boat) + STACKSIZE_DELIMITER + 4,
-			GameData.getItemRegistry().getNameForObject(Items.chest_minecart) + STACKSIZE_DELIMITER + 4,
-			GameData.getItemRegistry().getNameForObject(Items.furnace_minecart) + STACKSIZE_DELIMITER + 4,
-			GameData.getItemRegistry().getNameForObject(Items.tnt_minecart) + STACKSIZE_DELIMITER + 4,
-			GameData.getItemRegistry().getNameForObject(Items.hopper_minecart) + STACKSIZE_DELIMITER + 4,
-			GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + STACKSIZE_DELIMITER + 4
+			GameData.getItemRegistry().getNameForObject(Items.wooden_door) + Names.Config.STACK_SIZE_DELIMITER + 64,
+			GameData.getItemRegistry().getNameForObject(Items.minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.saddle) + Names.Config.STACK_SIZE_DELIMITER + 8,
+			GameData.getItemRegistry().getNameForObject(Items.iron_door) + Names.Config.STACK_SIZE_DELIMITER + 64,
+			GameData.getItemRegistry().getNameForObject(Items.boat) + Names.Config.STACK_SIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.chest_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.furnace_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.tnt_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.hopper_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
+			GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4
 	};
 
 	public static int stackLimit = STACKLIMIT_DEFAULT;
@@ -78,28 +63,28 @@ public class ConfigurationHandler {
 	}
 
 	private static void loadConfiguration() {
-		propStackLimit = configuration.get(CATEGORY, STACKLIMIT, STACKLIMIT_DEFAULT, STACKLIMIT_DESC, STACKLIMIT_MIN, STACKLIMIT_MAX);
-		propStackLimit.setLanguageKey(String.format("%s.%s", LANG_PREFIX, STACKLIMIT));
+		propStackLimit = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACKLIMIT, STACKLIMIT_DEFAULT, Names.Config.STACKLIMIT_DESC, STACKLIMIT_MIN, STACKLIMIT_MAX);
+		propStackLimit.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACKLIMIT);
 		stackLimit = propStackLimit.getInt(STACKLIMIT_DEFAULT);
 
-		propInterval = configuration.get(CATEGORY, INTERVAL, INTERVAL_DEFAULT, INTERVAL_DESC, INTERVAL_MIN, INTERVAL_MAX);
-		propInterval.setLanguageKey(String.format("%s.%s", LANG_PREFIX, INTERVAL));
+		propInterval = configuration.get(Names.Config.Category.GENERAL, Names.Config.INTERVAL, INTERVAL_DEFAULT, Names.Config.INTERVAL_DESC, INTERVAL_MIN, INTERVAL_MAX);
+		propInterval.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.INTERVAL);
 		interval = propInterval.getInt(INTERVAL_DEFAULT);
 
-		propDistance = configuration.get(CATEGORY, DISTANCE, DISTANCE_DEFAULT, DISTANCE_DESC, DISTANCE_MIN, DISTANCE_MAX);
-		propDistance.setLanguageKey(String.format("%s.%s", LANG_PREFIX, DISTANCE));
+		propDistance = configuration.get(Names.Config.Category.GENERAL, Names.Config.DISTANCE, DISTANCE_DEFAULT, Names.Config.DISTANCE_DESC, DISTANCE_MIN, DISTANCE_MAX);
+		propDistance.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DISTANCE);
 		distance = propDistance.getDouble(DISTANCE_DEFAULT);
 
-		propStackItems = configuration.get(CATEGORY, STACKITEMS, STACKITEMS_DEFAULT, STACKITEMS_DESC);
-		propStackItems.setLanguageKey(String.format("%s.%s", LANG_PREFIX, STACKITEMS));
+		propStackItems = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_ITEMS, STACKITEMS_DEFAULT, Names.Config.STACK_ITEMS_DESC);
+		propStackItems.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACK_ITEMS);
 		stackItems = propStackItems.getBoolean(STACKITEMS_DEFAULT);
 
-		propStackExperience = configuration.get(CATEGORY, STACKEXPERIENCE, STACKEXPERIENCE_DEFAULT, STACKEXPERIENCE_DESC);
-		propStackExperience.setLanguageKey(String.format("%s.%s", LANG_PREFIX, STACKEXPERIENCE));
+		propStackExperience = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_EXPERIENCE, STACKEXPERIENCE_DEFAULT, Names.Config.STACK_EXPERIENCE_DESC);
+		propStackExperience.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACK_EXPERIENCE);
 		stackExperience = propStackExperience.getBoolean(STACKEXPERIENCE_DEFAULT);
 
-		propStackSizes = configuration.get(CATEGORY, STACKSIZES, STACKSIZES_DEFAULT, STACKSIZES_DESC);
-		propStackSizes.setLanguageKey(String.format("%s.%s", LANG_PREFIX, STACKSIZES));
+		propStackSizes = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_SIZES, STACKSIZES_DEFAULT, Names.Config.STACK_SIZES_DESC);
+		propStackSizes.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACK_SIZES);
 		propStackSizes.setValidationPattern(Pattern.compile("[A-Za-z0-9_:]+-\\d+"));
 		stackSizes = propStackSizes.getStringList();
 

@@ -3,6 +3,7 @@ package com.github.lunatrius.stackie;
 import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.stackie.handler.ConfigurationHandler;
 import com.github.lunatrius.stackie.proxy.CommonProxy;
+import com.github.lunatrius.stackie.reference.Names;
 import com.github.lunatrius.stackie.reference.Reference;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -38,7 +39,7 @@ public class Stackie {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		for (String info : ConfigurationHandler.stackSizes) {
-			String[] parts = info.split(ConfigurationHandler.STACKSIZE_DELIMITER);
+			String[] parts = info.split(Names.Config.STACK_SIZE_DELIMITER);
 			if (parts.length == 2) {
 				try {
 					String uniqueName = parts[0];
@@ -49,7 +50,6 @@ public class Stackie {
 						item.setMaxStackSize(stackSize);
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
 					Reference.logger.error("Invalid format?", e);
 				}
 			}
