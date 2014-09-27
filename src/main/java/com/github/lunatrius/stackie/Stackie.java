@@ -19,50 +19,50 @@ import net.minecraft.util.MathHelper;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY)
 public class Stackie {
-	@SidedProxy(serverSide = Reference.PROXY_SERVER, clientSide = Reference.PROXY_CLIENT)
-	public static CommonProxy proxy;
+    @SidedProxy(serverSide = Reference.PROXY_SERVER, clientSide = Reference.PROXY_CLIENT)
+    public static CommonProxy proxy;
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		Reference.logger = event.getModLog();
-		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-		proxy.setConfigEntryClasses();
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        Reference.logger = event.getModLog();
+        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+        proxy.setConfigEntryClasses();
 
-		VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
-	}
+        VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
+    }
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		proxy.registerEvents();
-	}
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        proxy.registerEvents();
+    }
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		for (String info : ConfigurationHandler.stackSizes) {
-			String[] parts = info.split(Names.Config.STACK_SIZE_DELIMITER);
-			if (parts.length == 2) {
-				try {
-					String uniqueName = parts[0];
-					int stackSize = MathHelper.clamp_int(Integer.parseInt(parts[1], 10), 1, 64);
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        for (String info : ConfigurationHandler.stackSizes) {
+            String[] parts = info.split(Names.Config.STACK_SIZE_DELIMITER);
+            if (parts.length == 2) {
+                try {
+                    String uniqueName = parts[0];
+                    int stackSize = MathHelper.clamp_int(Integer.parseInt(parts[1], 10), 1, 64);
 
-					Item item = GameData.getItemRegistry().getObject(uniqueName);
-					if (item != null) {
-						item.setMaxStackSize(stackSize);
-					}
-				} catch (Exception e) {
-					Reference.logger.error("Invalid format?", e);
-				}
-			}
-		}
-	}
+                    Item item = GameData.getItemRegistry().getObject(uniqueName);
+                    if (item != null) {
+                        item.setMaxStackSize(stackSize);
+                    }
+                } catch (Exception e) {
+                    Reference.logger.error("Invalid format?", e);
+                }
+            }
+        }
+    }
 
-	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event) {
-		proxy.serverStarting(event);
-	}
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        proxy.serverStarting(event);
+    }
 
-	@EventHandler
-	public void serverStopping(FMLServerStoppingEvent event) {
-		proxy.serverStopping(event);
-	}
+    @EventHandler
+    public void serverStopping(FMLServerStoppingEvent event) {
+        proxy.serverStopping(event);
+    }
 }
