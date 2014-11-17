@@ -39,5 +39,6 @@ if (project.hasProperty('api_key_curseforge') && project.hasProperty('extra_curs
         apiKey = project.api_key_curseforge
         projectId = project.extra_curseforge_id
         changelog = ''
+        addGameVersion minecraft.version
     }
 }
