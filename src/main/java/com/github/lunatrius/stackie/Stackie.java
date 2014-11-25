@@ -13,14 +13,23 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
+
+import java.util.Map;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY)
 public class Stackie {
     @SidedProxy(serverSide = Reference.PROXY_SERVER, clientSide = Reference.PROXY_CLIENT)
     public static CommonProxy proxy;
+
+    @NetworkCheckHandler
+    public boolean checkModList(Map<String, String> versions, Side side) {
+        return true;
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
