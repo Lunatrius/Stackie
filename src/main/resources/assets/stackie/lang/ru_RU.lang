@@ -1,20 +1,7 @@
 # gui - config
-# stackie.config.stackLimit=Stack Limit
-# stackie.config.stackLimit.tooltip=If the amount of entities surpasses this number stacking will be disabled (per dimension).
-# stackie.config.interval=Interval
-# stackie.config.interval.tooltip=Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.
-# stackie.config.distance=Distance
-# stackie.config.distance.tooltip=Maximum distance between items/experience orbs that can be still stacked (relative to block size).
-# stackie.config.stackItems=Stack items
-# stackie.config.stackItems.tooltip=Should it stack items?
-# stackie.config.stackExperience=Stack experience
-# stackie.config.stackExperience.tooltip=Should it stack experience orbs?
-# stackie.config.stackSizes=Stack sizes
-# stackie.config.stackSizes.tooltip=A list of uniqueName-stackSize mappings. These values will override the default stack sizes.
 
 # commands
 commands.stackie.usage=/stackie <setinterval|setdistance|stackitems|stackexperience> <number|true|false>
-# commands.stackie.stacklimit=Stacking limit was set to: %d
 commands.stackie.interval=Интервал укладки установлен на: %d (%.1f секунд)
 commands.stackie.distance=Дистанция укладки установлена на: %.2f
 commands.stackie.stackitems=Укладка предметов установлена на: %s
