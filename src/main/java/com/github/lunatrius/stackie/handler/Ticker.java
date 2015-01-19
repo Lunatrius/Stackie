@@ -12,8 +12,11 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class Ticker extends StackingHandler {
+    public static final Ticker INSTANCE = new Ticker();
     private MinecraftServer server = null;
     private int ticks = -1;
+
+    private Ticker() {}
 
     @SubscribeEvent
     public void tick(TickEvent.ServerTickEvent event) {

@@ -19,8 +19,6 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.registry.GameData;
 
 public abstract class CommonProxy {
-    private Ticker ticker = null;
-
     public void preInit(FMLPreInitializationEvent event) {
         Reference.logger = event.getModLog();
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
@@ -29,9 +27,8 @@ public abstract class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-        this.ticker = new Ticker();
-        FMLCommonHandler.instance().bus().register(this.ticker);
-        MinecraftForge.EVENT_BUS.register(new SpawnHandler());
+        FMLCommonHandler.instance().bus().register(Ticker.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(SpawnHandler.INSTANCE);
     }
 
     public void postInit(FMLPostInitializationEvent event) {
@@ -54,11 +51,11 @@ public abstract class CommonProxy {
     }
 
     public void serverStarting(FMLServerStartingEvent event) {
-        this.ticker.setServer(event.getServer());
+        Ticker.INSTANCE.setServer(event.getServer());
         event.registerServerCommand(new StackieCommand());
     }
 
     public void serverStopping(FMLServerStoppingEvent event) {
-        this.ticker.setServer(null);
+        Ticker.INSTANCE.setServer(null);
     }
 }

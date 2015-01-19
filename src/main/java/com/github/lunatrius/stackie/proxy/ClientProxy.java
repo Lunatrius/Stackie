@@ -20,6 +20,6 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
 
-        FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
+        FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
     }
 }

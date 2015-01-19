@@ -9,6 +9,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.List;
 
 public class SpawnHandler extends StackingHandler {
+    public static final SpawnHandler INSTANCE = new SpawnHandler();
+
+    private SpawnHandler() {}
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.isCanceled()) {

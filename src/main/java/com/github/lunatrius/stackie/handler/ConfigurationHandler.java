@@ -14,6 +14,8 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public class ConfigurationHandler {
+    public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
+
     public static final int STACKLIMIT_MIN = 100;
     public static final int STACKLIMIT_MAX = 10000;
     public static final int INTERVAL_MIN = 5;
@@ -122,6 +124,8 @@ public class ConfigurationHandler {
             configuration.save();
         }
     }
+
+    private ConfigurationHandler() {}
 
     @SubscribeEvent
     public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
