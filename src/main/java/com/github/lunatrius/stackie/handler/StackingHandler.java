@@ -5,7 +5,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
 
-public class StackingHandler {
+public abstract class StackingHandler {
     public static final int MAXIMUM_STACKSIZE = 2048;
     public static final int MAXIMUM_EXPERIENCE = 1024;
 
