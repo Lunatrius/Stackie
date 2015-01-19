@@ -1,8 +1,8 @@
 package com.github.lunatrius.stackie.proxy;
 
 import com.github.lunatrius.stackie.handler.ConfigurationHandler;
-import cpw.mods.fml.client.config.GuiConfigEntries;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.client.config.GuiConfigEntries;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class ClientProxy extends CommonProxy {
     @Override

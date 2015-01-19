@@ -3,12 +3,12 @@ package com.github.lunatrius.stackie.handler;
 
 import com.github.lunatrius.stackie.reference.Names;
 import com.github.lunatrius.stackie.reference.Reference;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.init.Items;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -29,7 +29,6 @@ public class ConfigurationHandler {
     public static final boolean STACKITEMS_DEFAULT = true;
     public static final boolean STACKEXPERIENCE_DEFAULT = true;
     public static final String[] STACKSIZES_DEFAULT = new String[] {
-            GameData.getItemRegistry().getNameForObject(Items.wooden_door) + Names.Config.STACK_SIZE_DELIMITER + 64,
             GameData.getItemRegistry().getNameForObject(Items.minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
             GameData.getItemRegistry().getNameForObject(Items.saddle) + Names.Config.STACK_SIZE_DELIMITER + 8,
             GameData.getItemRegistry().getNameForObject(Items.iron_door) + Names.Config.STACK_SIZE_DELIMITER + 64,

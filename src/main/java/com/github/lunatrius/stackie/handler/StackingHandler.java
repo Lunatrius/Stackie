@@ -111,11 +111,11 @@ public class StackingHandler {
             return false;
         }
 
-        if (itemStackL.stackTagCompound == null && itemStackR.stackTagCompound == null) {
+        if (itemStackL.getTagCompound() == null && itemStackR.getTagCompound() == null) {
             return true;
         }
 
-        return itemStackL.stackTagCompound != null && itemStackL.stackTagCompound.equals(itemStackR.stackTagCompound);
+        return itemStackL.getTagCompound() != null && itemStackL.getTagCompound().equals(itemStackR.getTagCompound());
     }
 
     private boolean stackExperience(EntityXPOrb entityExpOrbL, EntityXPOrb entityExpOrbR) {
