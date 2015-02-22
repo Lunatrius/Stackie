@@ -13,12 +13,12 @@ import java.util.List;
 
 public class StackieCommand extends CommandBase {
     @Override
-    public String getName() {
+    public String getCommandName() {
         return Names.Command.NAME;
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    public String getCommandUsage(ICommandSender sender) {
         return Names.Command.Message.USAGE;
     }
 
@@ -28,7 +28,7 @@ public class StackieCommand extends CommandBase {
     }
 
     @Override
-    public List tabComplete(ICommandSender sender, String[] args, BlockPos pos) {
+    public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, Names.Command.STACKLIMIT, Names.Command.INTERVAL, Names.Command.DISTANCE, Names.Command.STACKITEMS, Names.Command.STACKEXPERIENCE);
         } else if (args.length == 2) {
@@ -41,7 +41,7 @@ public class StackieCommand extends CommandBase {
     }
 
     @Override
-    public void execute(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase(Names.Command.STACKLIMIT)) {
                 ConfigurationHandler.setStackLimit(Integer.parseInt(args[1]));
@@ -71,7 +71,7 @@ public class StackieCommand extends CommandBase {
             }
         }
 
-        throw new WrongUsageException(getUsage(sender));
+        throw new WrongUsageException(getCommandUsage(sender));
     }
 
     @Override
