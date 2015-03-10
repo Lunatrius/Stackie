@@ -14,9 +14,9 @@ public abstract class StackingHandler {
         EXPERIENCEORB(EntityXPOrb.class),
         OTHER(null);
 
-        public final Class clazz;
+        public final Class<? extends Entity> clazz;
 
-        private EntityType(Class clazz) {
+        private EntityType(Class<? extends Entity> clazz) {
             this.clazz = clazz;
         }
     }
