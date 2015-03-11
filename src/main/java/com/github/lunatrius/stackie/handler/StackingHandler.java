@@ -6,7 +6,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
 
 public abstract class StackingHandler {
-    public static final int MAXIMUM_STACKSIZE = 2048;
+    public static final int MAXIMUM_STACKSIZE = 127; // vanilla stores the stack size in a byte...
     public static final int MAXIMUM_EXPERIENCE = 1024;
 
     protected enum EntityType {
