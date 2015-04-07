@@ -5,9 +5,14 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class StackingHandler {
     public static final int MAXIMUM_STACKSIZE = 127; // vanilla stores the stack size in a byte...
     public static final int MAXIMUM_EXPERIENCE = 1024;
+
+    private static final Set<Class<?>> clazzBlacklist = new HashSet<Class<?>>();
 
     protected enum EntityType {
         ITEM(EntityItem.class),
@@ -133,6 +138,10 @@ public class StackingHandler {
 
     protected EntityType getType(Entity entity) {
         if (ConfigurationHandler.stackItems && entity instanceof EntityItem) {
+            if (clazzBlacklist.contains(entity.getClass())) {
+                return EntityType.OTHER;
+            }
+
             return EntityType.ITEM;
         } else if (ConfigurationHandler.stackExperience && entity instanceof EntityXPOrb) {
             return EntityType.EXPERIENCEORB;
@@ -150,5 +159,25 @@ public class StackingHandler {
 
     private boolean isEqual(double a, double b, double epsilon) {
         return Math.abs(a - b) < epsilon;
+    }
+
+    private static Class<?> getClassFor(final String className) {
+        try {
+            return Class.forName(className);
+        } catch (final ClassNotFoundException ignored) {
+        }
+
+        return null;
+    }
+
+    private static void blacklistClass(final String className) {
+        final Class<?> clazz = getClassFor(className);
+        if (clazz != null) {
+            clazzBlacklist.add(clazz);
+        }
+    }
+
+    static {
+        blacklistClass("thaumcraft.common.entities.EntityFollowingItem");
     }
 }
