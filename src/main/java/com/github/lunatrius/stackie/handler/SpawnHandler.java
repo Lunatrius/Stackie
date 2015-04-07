@@ -24,6 +24,10 @@ public class SpawnHandler extends StackingHandler {
         }
 
         final Entity entity = event.entity;
+        if (entity.isDead) {
+            return;
+        }
+
         final EntityType type = getType(entity);
         if (type.clazz == null) {
             return;
