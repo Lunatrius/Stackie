@@ -3,8 +3,8 @@ package com.github.lunatrius.stackie.proxy;
 import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.stackie.command.StackieCommand;
 import com.github.lunatrius.stackie.handler.ConfigurationHandler;
-import com.github.lunatrius.stackie.handler.SpawnHandler;
-import com.github.lunatrius.stackie.handler.Ticker;
+import com.github.lunatrius.stackie.handler.StackingHandlerJoin;
+import com.github.lunatrius.stackie.handler.StackingHandlerTick;
 import com.github.lunatrius.stackie.reference.Names;
 import com.github.lunatrius.stackie.reference.Reference;
 import net.minecraft.item.Item;
@@ -27,8 +27,8 @@ public abstract class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-        FMLCommonHandler.instance().bus().register(Ticker.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(SpawnHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(StackingHandlerTick.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new StackingHandlerJoin());
     }
 
     public void postInit(FMLPostInitializationEvent event) {
@@ -51,11 +51,11 @@ public abstract class CommonProxy {
     }
 
     public void serverStarting(FMLServerStartingEvent event) {
-        Ticker.INSTANCE.setServer(event.getServer());
+        StackingHandlerTick.INSTANCE.setServer(event.getServer());
         event.registerServerCommand(new StackieCommand());
     }
 
     public void serverStopping(FMLServerStoppingEvent event) {
-        Ticker.INSTANCE.setServer(null);
+        StackingHandlerTick.INSTANCE.setServer(null);
     }
 }
