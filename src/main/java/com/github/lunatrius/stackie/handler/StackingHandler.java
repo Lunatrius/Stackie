@@ -10,12 +10,12 @@ public class StackingHandler {
     public static final int MAXIMUM_EXPERIENCE = 1024;
 
     protected boolean stackItems(EntityItem entityItemL, EntityItem entityItemR) {
-        final ItemStack itemStackL = entityItemL.getEntityItem();
-        final ItemStack itemStackR = entityItemR.getEntityItem();
-
-        if (!areItemStacksValid(itemStackL, itemStackR)) {
+        if (!areEntityItemsEqual(entityItemL, entityItemR)) {
             return false;
         }
+
+        final ItemStack itemStackL = entityItemL.getEntityItem();
+        final ItemStack itemStackR = entityItemR.getEntityItem();
 
         final int itemsIn = Math.min(MAXIMUM_STACKSIZE - itemStackL.stackSize, itemStackR.stackSize);
         itemStackL.stackSize += itemsIn;
@@ -29,7 +29,25 @@ public class StackingHandler {
         return itemStackR.stackSize <= 0;
     }
 
-    private boolean areItemStacksValid(ItemStack itemStackL, ItemStack itemStackR) {
+    /**
+     * @see net.minecraft.entity.item.EntityItem#combineItems
+     */
+    private boolean areEntityItemsEqual(final EntityItem entityItemL, final EntityItem entityItemR) {
+        if (entityItemL == entityItemR) {
+            return false;
+        }
+
+        if (entityItemL.delayBeforeCanPickup == 32767 || entityItemR.delayBeforeCanPickup == 32767) {
+            return false;
+        }
+
+        if (entityItemL.age == -32768 || entityItemR.age == -32768) {
+            return false;
+        }
+
+        final ItemStack itemStackL = entityItemL.getEntityItem();
+        final ItemStack itemStackR = entityItemR.getEntityItem();
+
         if (itemStackL == null || itemStackR == null) {
             return false;
         }
@@ -42,19 +60,27 @@ public class StackingHandler {
             return false;
         }
 
+        if (itemStackL.getItem() == null) {
+            return false;
+        }
+
         if (itemStackL.getItem() != itemStackR.getItem()) {
             return false;
         }
 
-        if (itemStackL.getItemDamage() != itemStackR.getItemDamage()) {
+        if (itemStackL.getItem().getHasSubtypes() && itemStackL.getMetadata() != itemStackR.getMetadata()) {
             return false;
         }
 
-        if (itemStackL.getTagCompound() == null && itemStackR.getTagCompound() == null) {
-            return true;
+        if (itemStackL.hasTagCompound() != itemStackR.hasTagCompound()) {
+            return false;
         }
 
-        return itemStackL.getTagCompound() != null && itemStackL.getTagCompound().equals(itemStackR.getTagCompound());
+        if (itemStackL.hasTagCompound() && !itemStackL.getTagCompound().equals(itemStackR.getTagCompound())) {
+            return false;
+        }
+
+        return true;
     }
 
     protected boolean stackExperience(EntityXPOrb entityExpOrbL, EntityXPOrb entityExpOrbR) {
