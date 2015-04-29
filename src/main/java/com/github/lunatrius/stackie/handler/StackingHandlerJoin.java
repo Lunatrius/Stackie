@@ -45,6 +45,11 @@ public class StackingHandlerJoin extends StackingHandler {
                 continue;
             }
 
+            // FIX: vanilla portal duping...
+            if (entityR.age < 20) {
+                continue;
+            }
+
             final boolean merged = stackItems(entity, entityR);
             if (merged) {
                 entityR.setDead();
@@ -57,6 +62,11 @@ public class StackingHandlerJoin extends StackingHandler {
 
         for (final EntityXPOrb entityR : entities) {
             if (entityR.isDead) {
+                continue;
+            }
+
+            // FIX: vanilla portal duping...
+            if (entityR.xpOrbAge < 20) {
                 continue;
             }
 
