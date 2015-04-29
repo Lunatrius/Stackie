@@ -1,9 +1,11 @@
 package com.github.lunatrius.stackie.handler;
 
+import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -36,16 +38,10 @@ public class StackingHandlerJoin extends StackingHandler {
     }
 
     private void stackItems(final EntityJoinWorldEvent event, final EntityItem entity) {
-        final double distance = ConfigurationHandler.distance;
-        final AxisAlignedBB boundingBox = new AxisAlignedBB(entity.posX - distance, entity.posY - distance, entity.posZ - distance, entity.posX + distance, entity.posY + distance, entity.posZ + distance);
-        final List<EntityItem> entities = event.world.getEntitiesWithinAABB(EntityItem.class, boundingBox);
+        final List<EntityItem> entities = getNearbyEntities(event.world, entity);
 
         for (final EntityItem entityR : entities) {
             if (entityR.isDead) {
-                continue;
-            }
-
-            if (!EntityItem.class.equals(entityR.getClass())) {
                 continue;
             }
 
@@ -57,16 +53,10 @@ public class StackingHandlerJoin extends StackingHandler {
     }
 
     private void stackExperience(final EntityJoinWorldEvent event, final EntityXPOrb entity) {
-        final double distance = ConfigurationHandler.distance;
-        final AxisAlignedBB boundingBox = new AxisAlignedBB(entity.posX - distance, entity.posY - distance, entity.posZ - distance, entity.posX + distance, entity.posY + distance, entity.posZ + distance);
-        final List<EntityXPOrb> entities = event.world.getEntitiesWithinAABB(EntityXPOrb.class, boundingBox);
+        final List<EntityXPOrb> entities = getNearbyEntities(event.world, entity);
 
         for (final EntityXPOrb entityR : entities) {
             if (entityR.isDead) {
-                continue;
-            }
-
-            if (!EntityXPOrb.class.equals(entityR.getClass())) {
                 continue;
             }
 
@@ -75,5 +65,19 @@ public class StackingHandlerJoin extends StackingHandler {
                 entityR.setDead();
             }
         }
+    }
+
+    private <T extends Entity> List<T> getNearbyEntities(final World world, T entity) {
+        final Class<?> clazz = entity.getClass();
+        final Predicate<T> filter = new Predicate<T>() {
+            @Override
+            public boolean apply(T input) {
+                return clazz.equals(input.getClass());
+            }
+        };
+
+        final double distance = ConfigurationHandler.distance;
+        final AxisAlignedBB boundingBox = new AxisAlignedBB(entity.posX - distance, entity.posY - distance, entity.posZ - distance, entity.posX + distance, entity.posY + distance, entity.posZ + distance);
+        return world.getEntitiesWithinAABB(clazz, boundingBox, filter);
     }
 }
