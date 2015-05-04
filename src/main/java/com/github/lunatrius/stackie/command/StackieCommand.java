@@ -28,9 +28,9 @@ public class StackieCommand extends CommandBase {
     @Override
     public List addTabCompletionOptions(ICommandSender commandSender, String[] args) {
         if (args.length == 1) {
-            return getListOfStringsMatchingLastWord(args, Names.Command.STACKLIMIT, Names.Command.INTERVAL, Names.Command.DISTANCE, Names.Command.STACKITEMS, Names.Command.STACKEXPERIENCE);
+            return getListOfStringsMatchingLastWord(args, Names.Command.STACK_LIMIT, Names.Command.INTERVAL, Names.Command.DISTANCE, Names.Command.STACK_ITEMS, Names.Command.STACK_EXPERIENCE);
         } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase(Names.Command.STACKITEMS) || args[0].equalsIgnoreCase(Names.Command.STACKEXPERIENCE)) {
+            if (args[0].equalsIgnoreCase(Names.Command.STACK_ITEMS) || args[0].equalsIgnoreCase(Names.Command.STACK_EXPERIENCE)) {
                 return getListOfStringsMatchingLastWord(args, Names.Command.TRUE, Names.Command.FALSE);
             }
         }
@@ -41,9 +41,9 @@ public class StackieCommand extends CommandBase {
     @Override
     public void processCommand(ICommandSender commandSender, String[] args) {
         if (args.length > 0) {
-            if (args[0].equalsIgnoreCase(Names.Command.STACKLIMIT)) {
+            if (args[0].equalsIgnoreCase(Names.Command.STACK_LIMIT)) {
                 ConfigurationHandler.setStackLimit(Integer.parseInt(args[1]));
-                commandSender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACKLIMIT, ConfigurationHandler.stackLimit));
+                commandSender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACK_LIMIT, ConfigurationHandler.stackLimit));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.INTERVAL)) {
@@ -56,14 +56,14 @@ public class StackieCommand extends CommandBase {
                 commandSender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.DISTANCE, ConfigurationHandler.distance));
                 ConfigurationHandler.save();
                 return;
-            } else if (args[0].equalsIgnoreCase(Names.Command.STACKITEMS)) {
+            } else if (args[0].equalsIgnoreCase(Names.Command.STACK_ITEMS)) {
                 ConfigurationHandler.setStackItems(Boolean.parseBoolean(args[1].toLowerCase()));
-                commandSender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACKITEMS, ConfigurationHandler.stackItems));
+                commandSender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACK_ITEMS, ConfigurationHandler.stackItems));
                 ConfigurationHandler.save();
                 return;
-            } else if (args[0].equalsIgnoreCase(Names.Command.STACKEXPERIENCE)) {
+            } else if (args[0].equalsIgnoreCase(Names.Command.STACK_EXPERIENCE)) {
                 ConfigurationHandler.setStackExperience(Boolean.parseBoolean(args[1].toLowerCase()));
-                commandSender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACKEXPERIENCE, ConfigurationHandler.stackExperience));
+                commandSender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACK_EXPERIENCE, ConfigurationHandler.stackExperience));
                 ConfigurationHandler.save();
                 return;
             }
