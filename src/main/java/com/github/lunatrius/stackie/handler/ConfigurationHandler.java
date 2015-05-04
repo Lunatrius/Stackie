@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 public class ConfigurationHandler {
     public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
 
-    public static final int STACKLIMIT_MIN = 100;
-    public static final int STACKLIMIT_MAX = 10000;
+    public static final int STACK_LIMIT_MIN = 100;
+    public static final int STACK_LIMIT_MAX = 10000;
     public static final int INTERVAL_MIN = 5;
     public static final int INTERVAL_MAX = 20 * 60;
     public static final double DISTANCE_MIN = 0.01;
@@ -25,12 +25,12 @@ public class ConfigurationHandler {
 
     public static Configuration configuration;
 
-    public static final int STACKLIMIT_DEFAULT = 2000;
+    public static final int STACK_LIMIT_DEFAULT = 2000;
     public static final int INTERVAL_DEFAULT = 20;
     public static final double DISTANCE_DEFAULT = 0.75;
-    public static final boolean STACKITEMS_DEFAULT = true;
-    public static final boolean STACKEXPERIENCE_DEFAULT = true;
-    public static final String[] STACKSIZES_DEFAULT = new String[] {
+    public static final boolean STACK_ITEMS_DEFAULT = true;
+    public static final boolean STACK_EXPERIENCE_DEFAULT = true;
+    public static final String[] STACK_SIZES_DEFAULT = new String[] {
             GameData.getItemRegistry().getNameForObject(Items.minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
             GameData.getItemRegistry().getNameForObject(Items.saddle) + Names.Config.STACK_SIZE_DELIMITER + 8,
             GameData.getItemRegistry().getNameForObject(Items.iron_door) + Names.Config.STACK_SIZE_DELIMITER + 64,
@@ -42,12 +42,12 @@ public class ConfigurationHandler {
             GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4
     };
 
-    public static int stackLimit = STACKLIMIT_DEFAULT;
+    public static int stackLimit = STACK_LIMIT_DEFAULT;
     public static int interval = INTERVAL_DEFAULT;
     public static double distance = DISTANCE_DEFAULT;
-    public static boolean stackItems = STACKITEMS_DEFAULT;
-    public static boolean stackExperience = STACKEXPERIENCE_DEFAULT;
-    public static String[] stackSizes = STACKSIZES_DEFAULT;
+    public static boolean stackItems = STACK_ITEMS_DEFAULT;
+    public static boolean stackExperience = STACK_EXPERIENCE_DEFAULT;
+    public static String[] stackSizes = STACK_SIZES_DEFAULT;
 
     public static Property propStackLimit = null;
     public static Property propInterval = null;
@@ -64,9 +64,9 @@ public class ConfigurationHandler {
     }
 
     private static void loadConfiguration() {
-        propStackLimit = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACKLIMIT, STACKLIMIT_DEFAULT, Names.Config.STACKLIMIT_DESC, STACKLIMIT_MIN, STACKLIMIT_MAX);
-        propStackLimit.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACKLIMIT);
-        stackLimit = propStackLimit.getInt(STACKLIMIT_DEFAULT);
+        propStackLimit = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_LIMIT, STACK_LIMIT_DEFAULT, Names.Config.STACK_LIMIT_DESC, STACK_LIMIT_MIN, STACK_LIMIT_MAX);
+        propStackLimit.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACK_LIMIT);
+        stackLimit = propStackLimit.getInt(STACK_LIMIT_DEFAULT);
 
         propInterval = configuration.get(Names.Config.Category.GENERAL, Names.Config.INTERVAL, INTERVAL_DEFAULT, Names.Config.INTERVAL_DESC, INTERVAL_MIN, INTERVAL_MAX);
         propInterval.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.INTERVAL);
@@ -76,15 +76,15 @@ public class ConfigurationHandler {
         propDistance.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DISTANCE);
         distance = propDistance.getDouble(DISTANCE_DEFAULT);
 
-        propStackItems = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_ITEMS, STACKITEMS_DEFAULT, Names.Config.STACK_ITEMS_DESC);
+        propStackItems = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_ITEMS, STACK_ITEMS_DEFAULT, Names.Config.STACK_ITEMS_DESC);
         propStackItems.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACK_ITEMS);
-        stackItems = propStackItems.getBoolean(STACKITEMS_DEFAULT);
+        stackItems = propStackItems.getBoolean(STACK_ITEMS_DEFAULT);
 
-        propStackExperience = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_EXPERIENCE, STACKEXPERIENCE_DEFAULT, Names.Config.STACK_EXPERIENCE_DESC);
+        propStackExperience = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_EXPERIENCE, STACK_EXPERIENCE_DEFAULT, Names.Config.STACK_EXPERIENCE_DESC);
         propStackExperience.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACK_EXPERIENCE);
-        stackExperience = propStackExperience.getBoolean(STACKEXPERIENCE_DEFAULT);
+        stackExperience = propStackExperience.getBoolean(STACK_EXPERIENCE_DEFAULT);
 
-        propStackSizes = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_SIZES, STACKSIZES_DEFAULT, Names.Config.STACK_SIZES_DESC);
+        propStackSizes = configuration.get(Names.Config.Category.GENERAL, Names.Config.STACK_SIZES, STACK_SIZES_DEFAULT, Names.Config.STACK_SIZES_DESC);
         propStackSizes.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACK_SIZES);
         propStackSizes.setValidationPattern(Pattern.compile("[A-Za-z0-9_:]+-\\d+"));
         stackSizes = propStackSizes.getStringList();
@@ -95,7 +95,7 @@ public class ConfigurationHandler {
     }
 
     public static void setStackLimit(int num) {
-        propStackLimit.set(num < STACKLIMIT_MIN ? STACKLIMIT_MIN : (num > STACKLIMIT_MAX ? STACKLIMIT_MAX : num));
+        propStackLimit.set(num < STACK_LIMIT_MIN ? STACK_LIMIT_MIN : (num > STACK_LIMIT_MAX ? STACK_LIMIT_MAX : num));
         stackLimit = propStackLimit.getInt(num);
     }
 

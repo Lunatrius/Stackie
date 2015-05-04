@@ -5,19 +5,19 @@ public final class Names {
     public static final class Command {
         public static final class Message {
             public static final String USAGE = "commands.stackie.usage";
-            public static final String STACKLIMIT = "commands.stackie.stacklimit";
+            public static final String STACK_LIMIT = "commands.stackie.stacklimit";
             public static final String INTERVAL = "commands.stackie.interval";
             public static final String DISTANCE = "commands.stackie.distance";
-            public static final String STACKITEMS = "commands.stackie.stackitems";
-            public static final String STACKEXPERIENCE = "commands.stackie.stackexperience";
+            public static final String STACK_ITEMS = "commands.stackie.stackitems";
+            public static final String STACK_EXPERIENCE = "commands.stackie.stackexperience";
         }
 
         public static final String NAME = "stackie";
-        public static final String STACKLIMIT = "setstacklimit";
+        public static final String STACK_LIMIT = "setstacklimit";
         public static final String INTERVAL = "setinterval";
         public static final String DISTANCE = "setdistance";
-        public static final String STACKITEMS = "stackitems";
-        public static final String STACKEXPERIENCE = "stackexperience";
+        public static final String STACK_ITEMS = "stackitems";
+        public static final String STACK_EXPERIENCE = "stackexperience";
         public static final String TRUE = "true";
         public static final String FALSE = "false";
     }
@@ -27,8 +27,8 @@ public final class Names {
             public static final String GENERAL = "general";
         }
 
-        public static final String STACKLIMIT = "stackLimit";
-        public static final String STACKLIMIT_DESC = "If the amount of entities surpasses this number stacking will be disabled (per dimension).";
+        public static final String STACK_LIMIT = "stackLimit";
+        public static final String STACK_LIMIT_DESC = "If the amount of entities surpasses this number stacking will be disabled (per dimension).";
         public static final String INTERVAL = "interval";
         public static final String INTERVAL_DESC = "Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.";
         public static final String DISTANCE = "distance";
