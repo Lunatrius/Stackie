@@ -30,7 +30,7 @@ public class ConfigurationHandler {
     public static final int STACK_LIMIT_DEFAULT = 2000;
     public static final int INTERVAL_DEFAULT = 20;
     public static final double DISTANCE_DEFAULT = 0.75;
-    public static final boolean STACK_ITEMS_DEFAULT = true;
+    public static final boolean STACK_ITEMS_DEFAULT = false;
     public static final boolean STACK_EXPERIENCE_DEFAULT = true;
     public static final String[] STACK_SIZES_DEFAULT = new String[] {
             GameData.getItemRegistry().getNameForObject(Items.wooden_door) + Names.Config.STACK_SIZE_DELIMITER + 64,
