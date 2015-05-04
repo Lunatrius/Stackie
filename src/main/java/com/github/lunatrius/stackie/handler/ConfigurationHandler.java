@@ -20,6 +20,10 @@ public class ConfigurationHandler {
     public static final int INTERVAL_MAX = 20 * 60;
     public static final double DISTANCE_MIN = 0.01;
     public static final double DISTANCE_MAX = 10.0;
+    public static final int MAXIMUM_STACK_SIZE_MIN = 64;
+    public static final int MAXIMUM_STACK_SIZE_MAX = 127; // vanilla stores the stack size in a byte...
+    public static final int MAXIMUM_EXPERIENCE_MIN = 32;
+    public static final int MAXIMUM_EXPERIENCE_MAX = 16384;
 
     public static Configuration configuration;
 
@@ -40,6 +44,8 @@ public class ConfigurationHandler {
             GameData.getItemRegistry().getNameForObject(Items.hopper_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
             GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4
     };
+    public static final int MAXIMUM_STACK_SIZE_DEFAULT = 64;
+    public static final int MAXIMUM_EXPERIENCE_DEFAULT = 1024;
 
     public static int stackLimit = STACK_LIMIT_DEFAULT;
     public static int interval = INTERVAL_DEFAULT;
@@ -47,6 +53,8 @@ public class ConfigurationHandler {
     public static boolean stackItems = STACK_ITEMS_DEFAULT;
     public static boolean stackExperience = STACK_EXPERIENCE_DEFAULT;
     public static String[] stackSizes = STACK_SIZES_DEFAULT;
+    public static int maximumStackSize = MAXIMUM_STACK_SIZE_DEFAULT;
+    public static int maximumExperience = MAXIMUM_EXPERIENCE_DEFAULT;
 
     public static Property propStackLimit = null;
     public static Property propInterval = null;
@@ -54,6 +62,8 @@ public class ConfigurationHandler {
     public static Property propStackItems = null;
     public static Property propStackExperience = null;
     public static Property propStackSizes = null;
+    public static Property propMaximumStackSize = null;
+    public static Property propMaximumExperience = null;
 
     public static void init(File configFile) {
         if (configuration == null) {
@@ -87,6 +97,14 @@ public class ConfigurationHandler {
         propStackSizes.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STACK_SIZES);
         propStackSizes.setValidationPattern(Pattern.compile("[A-Za-z0-9_:]+-\\d+"));
         stackSizes = propStackSizes.getStringList();
+
+        propMaximumStackSize = configuration.get(Names.Config.Category.GENERAL, Names.Config.MAXIMUM_STACK_SIZE, MAXIMUM_STACK_SIZE_DEFAULT, Names.Config.MAXIMUM_STACK_SIZE_DESC, MAXIMUM_STACK_SIZE_MIN, MAXIMUM_STACK_SIZE_MAX);
+        propMaximumStackSize.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.MAXIMUM_STACK_SIZE);
+        maximumStackSize = propMaximumStackSize.getInt(MAXIMUM_STACK_SIZE_DEFAULT);
+
+        propMaximumExperience = configuration.get(Names.Config.Category.GENERAL, Names.Config.MAXIMUM_EXPERIENCE, MAXIMUM_EXPERIENCE_DEFAULT, Names.Config.MAXIMUM_EXPERIENCE_DESC, MAXIMUM_EXPERIENCE_MIN, MAXIMUM_EXPERIENCE_MAX);
+        propMaximumExperience.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.MAXIMUM_EXPERIENCE);
+        maximumExperience = propMaximumExperience.getInt(MAXIMUM_EXPERIENCE_DEFAULT);
 
         if (configuration.hasChanged()) {
             configuration.save();

@@ -10,6 +10,8 @@ public class ClientProxy extends CommonProxy {
         ConfigurationHandler.propStackLimit.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
         ConfigurationHandler.propInterval.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
         ConfigurationHandler.propDistance.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+        ConfigurationHandler.propMaximumStackSize.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+        ConfigurationHandler.propMaximumExperience.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
     }
 
     @Override
