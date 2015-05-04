@@ -40,6 +40,10 @@ public final class Names {
         public static final String STACK_SIZE_DELIMITER = "-";
         public static final String STACK_SIZES = "stackSizes";
         public static final String STACK_SIZES_DESC = "A list of uniqueName" + STACK_SIZE_DELIMITER + "stackSize mappings. These values will override the default stack sizes.";
+        public static final String MAXIMUM_STACK_SIZE = "maximumStackSize";
+        public static final String MAXIMUM_STACK_SIZE_DESC = "Items will be stacked up to this amount.";
+        public static final String MAXIMUM_EXPERIENCE = "maximumExperience";
+        public static final String MAXIMUM_EXPERIENCE_DESC = "Experience will be stacked up to this amount.";
 
         public static final String LANG_PREFIX = Reference.MODID.toLowerCase() + ".config";
     }

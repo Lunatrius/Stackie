@@ -6,9 +6,6 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
 
 public class StackingHandler {
-    public static final int MAXIMUM_STACK_SIZE = 127; // vanilla stores the stack size in a byte...
-    public static final int MAXIMUM_EXPERIENCE = 1024;
-
     protected boolean stackItems(EntityItem entityItemL, EntityItem entityItemR) {
         if (!areEntityItemsEqual(entityItemL, entityItemR)) {
             return false;
@@ -17,7 +14,7 @@ public class StackingHandler {
         final ItemStack itemStackL = entityItemL.getEntityItem();
         final ItemStack itemStackR = entityItemR.getEntityItem();
 
-        final int itemsIn = Math.min(MAXIMUM_STACK_SIZE - itemStackL.stackSize, itemStackR.stackSize);
+        final int itemsIn = Math.min(ConfigurationHandler.maximumStackSize - itemStackL.stackSize, itemStackR.stackSize);
         itemStackL.stackSize += itemsIn;
         itemStackR.stackSize -= itemsIn;
 
@@ -84,7 +81,7 @@ public class StackingHandler {
     }
 
     protected boolean stackExperience(EntityXPOrb entityExpOrbL, EntityXPOrb entityExpOrbR) {
-        final int experienceIn = Math.min(MAXIMUM_EXPERIENCE - entityExpOrbL.xpValue, entityExpOrbR.xpValue);
+        final int experienceIn = Math.min(ConfigurationHandler.maximumExperience - entityExpOrbL.xpValue, entityExpOrbR.xpValue);
         entityExpOrbL.xpValue += experienceIn;
         entityExpOrbR.xpValue -= experienceIn;
 

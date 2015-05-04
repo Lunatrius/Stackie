@@ -5,12 +5,16 @@ stackie.config.interval=Interval
 stackie.config.interval.tooltip=Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.
 stackie.config.distance=Distance
 stackie.config.distance.tooltip=Maximum distance between items/experience orbs that can be still stacked (relative to block size).
-stackie.config.stackItems=Stack items
+stackie.config.stackItems=Stack Items
 stackie.config.stackItems.tooltip=Should it stack items?
-stackie.config.stackExperience=Stack experience
+stackie.config.stackExperience=Stack Experience
 stackie.config.stackExperience.tooltip=Should it stack experience orbs?
-stackie.config.stackSizes=Stack sizes
+stackie.config.stackSizes=Stack Sizes
 stackie.config.stackSizes.tooltip=A list of uniqueName-stackSize mappings. These values will override the default stack sizes.
+stackie.config.maximumStackSize=Maximum Stack Size
+stackie.config.maximumStackSize.tooltip=Items will be stacked up to this amount.
+stackie.config.maximumExperience=Maximum Experience
+stackie.config.maximumExperience.tooltip=Experience will be stacked up to this amount.
 
 # commands
 commands.stackie.usage=/stackie <setinterval|setdistance|stackitems|stackexperience> <number|true|false>
