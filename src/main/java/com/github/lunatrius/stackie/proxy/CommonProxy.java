@@ -3,13 +3,11 @@ package com.github.lunatrius.stackie.proxy;
 import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.stackie.command.StackieCommand;
 import com.github.lunatrius.stackie.handler.ConfigurationHandler;
-import com.github.lunatrius.stackie.handler.StackingHandlerJoin;
 import com.github.lunatrius.stackie.handler.StackingHandlerTick;
 import com.github.lunatrius.stackie.reference.Names;
 import com.github.lunatrius.stackie.reference.Reference;
 import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -28,7 +26,8 @@ public abstract class CommonProxy {
 
     public void init(FMLInitializationEvent event) {
         FMLCommonHandler.instance().bus().register(StackingHandlerTick.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(new StackingHandlerJoin());
+        // TODO: find a sane way to merge stacks when spawned, remove it otherwise
+        // MinecraftForge.EVENT_BUS.register(new StackingHandlerJoin());
     }
 
     public void postInit(FMLPostInitializationEvent event) {
