@@ -66,7 +66,7 @@ public class ConfigurationHandler {
     public static Property propMaximumStackSize = null;
     public static Property propMaximumExperience = null;
 
-    public static void init(File configFile) {
+    public static void init(final File configFile) {
         if (configuration == null) {
             configuration = new Configuration(configFile);
             loadConfiguration();
@@ -112,27 +112,27 @@ public class ConfigurationHandler {
         }
     }
 
-    public static void setStackLimit(int num) {
+    public static void setStackLimit(final int num) {
         propStackLimit.set(num < STACK_LIMIT_MIN ? STACK_LIMIT_MIN : (num > STACK_LIMIT_MAX ? STACK_LIMIT_MAX : num));
         stackLimit = propStackLimit.getInt(num);
     }
 
-    public static void setInterval(int num) {
+    public static void setInterval(final int num) {
         propInterval.set(num < INTERVAL_MIN ? INTERVAL_MIN : (num > INTERVAL_MAX ? INTERVAL_MAX : num));
         interval = propInterval.getInt(num);
     }
 
-    public static void setDistance(double num) {
+    public static void setDistance(final double num) {
         propDistance.set(num < DISTANCE_MIN ? DISTANCE_MIN : (num > DISTANCE_MAX ? DISTANCE_MAX : num));
         distance = propDistance.getDouble(num);
     }
 
-    public static void setStackItems(boolean stack) {
+    public static void setStackItems(final boolean stack) {
         propStackItems.set(stack);
         stackItems = propStackItems.getBoolean(stack);
     }
 
-    public static void setStackExperience(boolean stack) {
+    public static void setStackExperience(final boolean stack) {
         propStackExperience.set(stack);
         stackExperience = propStackExperience.getBoolean(stack);
     }
@@ -146,7 +146,7 @@ public class ConfigurationHandler {
     private ConfigurationHandler() {}
 
     @SubscribeEvent
-    public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+    public void onConfigurationChangedEvent(final ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.modID.equalsIgnoreCase(Reference.MODID)) {
             loadConfiguration();
         }

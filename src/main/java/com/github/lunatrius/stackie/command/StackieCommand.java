@@ -10,6 +10,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 
 import java.util.List;
+import java.util.Locale;
 
 public class StackieCommand extends CommandBase {
     @Override
@@ -18,7 +19,7 @@ public class StackieCommand extends CommandBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getCommandUsage(final ICommandSender sender) {
         return Names.Command.Message.USAGE;
     }
 
@@ -28,7 +29,7 @@ public class StackieCommand extends CommandBase {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+    public List<String> addTabCompletionOptions(final ICommandSender sender, final String[] args, final BlockPos pos) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, Names.Command.STACK_LIMIT, Names.Command.INTERVAL, Names.Command.DISTANCE, Names.Command.STACK_ITEMS, Names.Command.STACK_EXPERIENCE);
         } else if (args.length == 2) {
@@ -41,7 +42,7 @@ public class StackieCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(final ICommandSender sender, final String[] args) throws CommandException {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase(Names.Command.STACK_LIMIT)) {
                 ConfigurationHandler.setStackLimit(Integer.parseInt(args[1]));
@@ -59,12 +60,12 @@ public class StackieCommand extends CommandBase {
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.STACK_ITEMS)) {
-                ConfigurationHandler.setStackItems(Boolean.parseBoolean(args[1].toLowerCase()));
+                ConfigurationHandler.setStackItems(Boolean.parseBoolean(args[1].toLowerCase(Locale.ENGLISH)));
                 sender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACK_ITEMS, ConfigurationHandler.stackItems));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.STACK_EXPERIENCE)) {
-                ConfigurationHandler.setStackExperience(Boolean.parseBoolean(args[1].toLowerCase()));
+                ConfigurationHandler.setStackExperience(Boolean.parseBoolean(args[1].toLowerCase(Locale.ENGLISH)));
                 sender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACK_EXPERIENCE, ConfigurationHandler.stackExperience));
                 ConfigurationHandler.save();
                 return;
@@ -72,11 +73,6 @@ public class StackieCommand extends CommandBase {
         }
 
         throw new WrongUsageException(getCommandUsage(sender));
-    }
-
-    @Override
-    public int compareTo(Object obj) {
-        return super.compareTo(obj);
     }
 }
 

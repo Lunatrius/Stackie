@@ -6,13 +6,17 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
 
 public class StackingHandler {
-    protected boolean stackItems(EntityItem entityItemL, EntityItem entityItemR) {
+    protected boolean stackItems(final EntityItem entityItemL, final EntityItem entityItemR) {
         if (!areEntityItemsEqual(entityItemL, entityItemR)) {
             return false;
         }
 
         final ItemStack itemStackL = entityItemL.getEntityItem();
         final ItemStack itemStackR = entityItemR.getEntityItem();
+
+        if (itemStackL.stackSize == ConfigurationHandler.maximumStackSize || itemStackR.stackSize == ConfigurationHandler.maximumStackSize) {
+            return false;
+        }
 
         final int itemsIn = Math.min(ConfigurationHandler.maximumStackSize - itemStackL.stackSize, itemStackR.stackSize);
         itemStackL.stackSize += itemsIn;
@@ -80,7 +84,7 @@ public class StackingHandler {
         return true;
     }
 
-    protected boolean stackExperience(EntityXPOrb entityExpOrbL, EntityXPOrb entityExpOrbR) {
+    protected boolean stackExperience(final EntityXPOrb entityExpOrbL, final EntityXPOrb entityExpOrbR) {
         final int experienceIn = Math.min(ConfigurationHandler.maximumExperience - entityExpOrbL.xpValue, entityExpOrbR.xpValue);
         entityExpOrbL.xpValue += experienceIn;
         entityExpOrbR.xpValue -= experienceIn;

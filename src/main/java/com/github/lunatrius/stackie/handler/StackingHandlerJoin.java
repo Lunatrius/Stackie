@@ -14,7 +14,7 @@ import java.util.List;
 
 public class StackingHandlerJoin extends StackingHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+    public void onEntityJoinWorld(final EntityJoinWorldEvent event) {
         if (event.isCanceled()) {
             return;
         }
@@ -77,11 +77,11 @@ public class StackingHandlerJoin extends StackingHandler {
         }
     }
 
-    private <T extends Entity> List<T> getNearbyEntities(final World world, T entity) {
-        final Class<?> clazz = entity.getClass();
+    private <T extends Entity> List<T> getNearbyEntities(final World world, final T entity) {
+        final Class<T> clazz = (Class<T>) entity.getClass();
         final Predicate<T> filter = new Predicate<T>() {
             @Override
-            public boolean apply(T input) {
+            public boolean apply(final T input) {
                 return clazz.equals(input.getClass());
             }
         };

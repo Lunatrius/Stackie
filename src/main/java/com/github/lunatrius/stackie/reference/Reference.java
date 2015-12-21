@@ -3,8 +3,11 @@ package com.github.lunatrius.stackie.reference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Locale;
+
 public class Reference {
     public static final String MODID = "Stackie";
+    public static final String MODID_LOWER = MODID.toLowerCase(Locale.ENGLISH);
     public static final String NAME = "Stackie";
     public static final String VERSION = "${version}";
     public static final String FORGE = "${forgeversion}";

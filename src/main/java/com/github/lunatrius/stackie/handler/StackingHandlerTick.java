@@ -21,7 +21,7 @@ public class StackingHandlerTick extends StackingHandler {
     private int ticks = -1;
 
     @SubscribeEvent
-    public void tick(TickEvent.ServerTickEvent event) {
+    public void tick(final TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             return;
         }
@@ -35,16 +35,16 @@ public class StackingHandlerTick extends StackingHandler {
         }
     }
 
-    public void setServer(MinecraftServer server) {
+    public void setServer(final MinecraftServer server) {
         this.server = server;
     }
 
-    private void processWorlds(WorldServer[] worldServers) {
-        for (WorldServer world : worldServers) {
+    private void processWorlds(final WorldServer[] worldServers) {
+        for (final WorldServer world : worldServers) {
             final List<EntityItem> entityItems = new ArrayList<EntityItem>();
             final List<EntityXPOrb> entityExperienceOrbs = new ArrayList<EntityXPOrb>();
 
-            for (Entity entity : (List<Entity>) world.loadedEntityList) {
+            for (final Entity entity : world.loadedEntityList) {
                 if (entity.isDead) {
                     continue;
                 }
@@ -61,7 +61,7 @@ public class StackingHandlerTick extends StackingHandler {
             if (entityItems.size() >= 2 && entityItems.size() <= ConfigurationHandler.stackLimit) {
                 try {
                     stackItems(Lists.reverse(entityItems));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     Reference.logger.error("Could not stack items!", e);
                 }
             }
@@ -69,7 +69,7 @@ public class StackingHandlerTick extends StackingHandler {
             if (entityExperienceOrbs.size() >= 2 && entityExperienceOrbs.size() <= ConfigurationHandler.stackLimit) {
                 try {
                     stackExperience(Lists.reverse(entityExperienceOrbs));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     Reference.logger.error("Could not stack experience!", e);
                 }
             }
