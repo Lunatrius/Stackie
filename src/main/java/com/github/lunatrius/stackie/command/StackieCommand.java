@@ -6,8 +6,9 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +30,7 @@ public class StackieCommand extends CommandBase {
     }
 
     @Override
-    public List<String> addTabCompletionOptions(final ICommandSender sender, final String[] args, final BlockPos pos) {
+    public List<String> getTabCompletionOptions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, Names.Command.STACK_LIMIT, Names.Command.INTERVAL, Names.Command.DISTANCE, Names.Command.STACK_ITEMS, Names.Command.STACK_EXPERIENCE);
         } else if (args.length == 2) {
@@ -42,31 +43,31 @@ public class StackieCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(final ICommandSender sender, final String[] args) throws CommandException {
+    public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase(Names.Command.STACK_LIMIT)) {
                 ConfigurationHandler.setStackLimit(Integer.parseInt(args[1]));
-                sender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACK_LIMIT, ConfigurationHandler.stackLimit));
+                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.STACK_LIMIT, ConfigurationHandler.stackLimit));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.INTERVAL)) {
                 ConfigurationHandler.setInterval(Integer.parseInt(args[1]));
-                sender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.INTERVAL, ConfigurationHandler.interval, ConfigurationHandler.interval / 20.0));
+                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.INTERVAL, ConfigurationHandler.interval, ConfigurationHandler.interval / 20.0));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.DISTANCE)) {
                 ConfigurationHandler.setDistance(Double.parseDouble(args[1]));
-                sender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.DISTANCE, ConfigurationHandler.distance));
+                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.DISTANCE, ConfigurationHandler.distance));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.STACK_ITEMS)) {
                 ConfigurationHandler.setStackItems(Boolean.parseBoolean(args[1].toLowerCase(Locale.ENGLISH)));
-                sender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACK_ITEMS, ConfigurationHandler.stackItems));
+                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.STACK_ITEMS, ConfigurationHandler.stackItems));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.STACK_EXPERIENCE)) {
                 ConfigurationHandler.setStackExperience(Boolean.parseBoolean(args[1].toLowerCase(Locale.ENGLISH)));
-                sender.addChatMessage(new ChatComponentTranslation(Names.Command.Message.STACK_EXPERIENCE, ConfigurationHandler.stackExperience));
+                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.STACK_EXPERIENCE, ConfigurationHandler.stackExperience));
                 ConfigurationHandler.save();
                 return;
             }

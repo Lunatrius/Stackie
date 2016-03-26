@@ -4,7 +4,7 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -19,11 +19,12 @@ public class StackingHandlerJoin extends StackingHandler {
             return;
         }
 
-        if (event.world == null || event.world.isRemote) {
+        final World world = event.getWorld();
+        if (world == null || world.isRemote) {
             return;
         }
 
-        final Entity entity = event.entity;
+        final Entity entity = event.getEntity();
         if (entity.isDead) {
             return;
         }
@@ -31,14 +32,14 @@ public class StackingHandlerJoin extends StackingHandler {
         final Class<? extends Entity> clazz = entity.getClass();
 
         if (EntityItem.class.equals(clazz)) {
-            stackItems(event, (EntityItem) entity);
+            stackItems(world, (EntityItem) entity);
         } else if (EntityXPOrb.class.equals(clazz)) {
-            stackExperience(event, (EntityXPOrb) entity);
+            stackExperience(world, (EntityXPOrb) entity);
         }
     }
 
-    private void stackItems(final EntityJoinWorldEvent event, final EntityItem entity) {
-        final List<EntityItem> entities = getNearbyEntities(event.world, entity);
+    private void stackItems(final World world, final EntityItem entity) {
+        final List<EntityItem> entities = getNearbyEntities(world, entity);
 
         for (final EntityItem entityR : entities) {
             if (entityR.isDead) {
@@ -57,8 +58,8 @@ public class StackingHandlerJoin extends StackingHandler {
         }
     }
 
-    private void stackExperience(final EntityJoinWorldEvent event, final EntityXPOrb entity) {
-        final List<EntityXPOrb> entities = getNearbyEntities(event.world, entity);
+    private void stackExperience(final World world, final EntityXPOrb entity) {
+        final List<EntityXPOrb> entities = getNearbyEntities(world, entity);
 
         for (final EntityXPOrb entityR : entities) {
             if (entityR.isDead) {
