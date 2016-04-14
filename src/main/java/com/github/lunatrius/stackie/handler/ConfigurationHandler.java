@@ -1,6 +1,5 @@
 package com.github.lunatrius.stackie.handler;
 
-
 import com.github.lunatrius.stackie.reference.Names;
 import com.github.lunatrius.stackie.reference.Reference;
 import net.minecraft.init.Items;
@@ -35,15 +34,15 @@ public class ConfigurationHandler {
     public static final boolean STACK_ITEMS_DEFAULT = false;
     public static final boolean STACK_EXPERIENCE_DEFAULT = true;
     public static final String[] STACK_SIZES_DEFAULT = new String[] {
-            GameData.getItemRegistry().getNameForObject(Items.minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
-            GameData.getItemRegistry().getNameForObject(Items.saddle) + Names.Config.STACK_SIZE_DELIMITER + 8,
-            GameData.getItemRegistry().getNameForObject(Items.iron_door) + Names.Config.STACK_SIZE_DELIMITER + 64,
-            GameData.getItemRegistry().getNameForObject(Items.boat) + Names.Config.STACK_SIZE_DELIMITER + 4,
-            GameData.getItemRegistry().getNameForObject(Items.chest_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
-            GameData.getItemRegistry().getNameForObject(Items.furnace_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
-            GameData.getItemRegistry().getNameForObject(Items.tnt_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
-            GameData.getItemRegistry().getNameForObject(Items.hopper_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4,
-            GameData.getItemRegistry().getNameForObject(Items.command_block_minecart) + Names.Config.STACK_SIZE_DELIMITER + 4
+            GameData.getItemRegistry().getNameForObject(Items.MINECART) + Names.Config.STACK_SIZE_DELIMITER + 4,
+            GameData.getItemRegistry().getNameForObject(Items.SADDLE) + Names.Config.STACK_SIZE_DELIMITER + 8,
+            GameData.getItemRegistry().getNameForObject(Items.IRON_DOOR) + Names.Config.STACK_SIZE_DELIMITER + 64,
+            GameData.getItemRegistry().getNameForObject(Items.BOAT) + Names.Config.STACK_SIZE_DELIMITER + 4,
+            GameData.getItemRegistry().getNameForObject(Items.CHEST_MINECART) + Names.Config.STACK_SIZE_DELIMITER + 4,
+            GameData.getItemRegistry().getNameForObject(Items.FURNACE_MINECART) + Names.Config.STACK_SIZE_DELIMITER + 4,
+            GameData.getItemRegistry().getNameForObject(Items.TNT_MINECART) + Names.Config.STACK_SIZE_DELIMITER + 4,
+            GameData.getItemRegistry().getNameForObject(Items.HOPPER_MINECART) + Names.Config.STACK_SIZE_DELIMITER + 4,
+            GameData.getItemRegistry().getNameForObject(Items.COMMAND_BLOCK_MINECART) + Names.Config.STACK_SIZE_DELIMITER + 4
     };
     public static final int MAXIMUM_STACK_SIZE_DEFAULT = 64;
     public static final int MAXIMUM_EXPERIENCE_DEFAULT = 1024;
