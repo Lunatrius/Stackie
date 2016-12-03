@@ -14,20 +14,20 @@ public class StackingHandler {
         final ItemStack itemStackL = entityItemL.getEntityItem();
         final ItemStack itemStackR = entityItemR.getEntityItem();
 
-        if (itemStackL.stackSize == ConfigurationHandler.maximumStackSize || itemStackR.stackSize == ConfigurationHandler.maximumStackSize) {
+        if (itemStackL.getCount() == ConfigurationHandler.maximumStackSize || itemStackR.getCount() == ConfigurationHandler.maximumStackSize) {
             return false;
         }
 
-        final int itemsIn = Math.min(ConfigurationHandler.maximumStackSize - itemStackL.stackSize, itemStackR.stackSize);
-        itemStackL.stackSize += itemsIn;
-        itemStackR.stackSize -= itemsIn;
+        final int itemsIn = Math.min(ConfigurationHandler.maximumStackSize - itemStackL.getCount(), itemStackR.getCount());
+        itemStackL.setCount(itemStackL.getCount() + itemsIn);
+        itemStackR.setCount(itemStackR.getCount() - itemsIn);
 
         entityItemL.setEntityItemStack(itemStackL);
         entityItemR.setEntityItemStack(itemStackR);
 
         entityItemL.age = Math.min(entityItemL.age, entityItemR.age);
 
-        return itemStackR.stackSize <= 0;
+        return itemStackR.getCount() <= 0;
     }
 
     /**
@@ -57,7 +57,7 @@ public class StackingHandler {
             return false;
         }
 
-        if (itemStackL.stackSize <= 0 || itemStackR.stackSize <= 0) {
+        if (itemStackL.getCount() <= 0 || itemStackR.getCount() <= 0) {
             return false;
         }
 

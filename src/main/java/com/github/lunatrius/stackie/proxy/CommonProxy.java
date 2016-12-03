@@ -37,7 +37,7 @@ public abstract class CommonProxy {
             if (parts.length == 2) {
                 try {
                     final String uniqueName = parts[0];
-                    final int stackSize = MathHelper.clamp_int(Integer.parseInt(parts[1], 10), 1, 64);
+                    final int stackSize = MathHelper.clamp(Integer.parseInt(parts[1], 10), 1, 64);
 
                     final Item item = GameData.getItemRegistry().getObject(new ResourceLocation(uniqueName));
                     if (item != null) {

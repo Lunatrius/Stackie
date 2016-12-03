@@ -27,8 +27,8 @@ public class StackingHandlerTick extends StackingHandler {
         }
 
         if (--this.ticks < 0) {
-            if (this.server != null && this.server.worldServers != null) {
-                processWorlds(this.server.worldServers);
+            if (this.server != null && this.server.worlds != null) {
+                processWorlds(this.server.worlds);
             }
 
             this.ticks = ConfigurationHandler.interval;

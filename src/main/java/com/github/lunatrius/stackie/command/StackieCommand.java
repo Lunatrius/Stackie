@@ -13,14 +13,15 @@ import net.minecraft.util.text.TextComponentTranslation;
 import java.util.List;
 import java.util.Locale;
 
+
 public class StackieCommand extends CommandBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.NAME;
     }
 
     @Override
-    public String getCommandUsage(final ICommandSender sender) {
+    public String getUsage(final ICommandSender sender) {
         return Names.Command.Message.USAGE;
     }
 
@@ -30,7 +31,7 @@ public class StackieCommand extends CommandBase {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
+    public List<String> getTabCompletions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, Names.Command.STACK_LIMIT, Names.Command.INTERVAL, Names.Command.DISTANCE, Names.Command.STACK_ITEMS, Names.Command.STACK_EXPERIENCE);
         } else if (args.length == 2) {
@@ -47,33 +48,33 @@ public class StackieCommand extends CommandBase {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase(Names.Command.STACK_LIMIT)) {
                 ConfigurationHandler.setStackLimit(Integer.parseInt(args[1]));
-                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.STACK_LIMIT, ConfigurationHandler.stackLimit));
+                sender.sendMessage(new TextComponentTranslation(Names.Command.Message.STACK_LIMIT, ConfigurationHandler.stackLimit));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.INTERVAL)) {
                 ConfigurationHandler.setInterval(Integer.parseInt(args[1]));
-                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.INTERVAL, ConfigurationHandler.interval, ConfigurationHandler.interval / 20.0));
+                sender.sendMessage(new TextComponentTranslation(Names.Command.Message.INTERVAL, ConfigurationHandler.interval, ConfigurationHandler.interval / 20.0));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.DISTANCE)) {
                 ConfigurationHandler.setDistance(Double.parseDouble(args[1]));
-                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.DISTANCE, ConfigurationHandler.distance));
+                sender.sendMessage(new TextComponentTranslation(Names.Command.Message.DISTANCE, ConfigurationHandler.distance));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.STACK_ITEMS)) {
                 ConfigurationHandler.setStackItems(Boolean.parseBoolean(args[1].toLowerCase(Locale.ENGLISH)));
-                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.STACK_ITEMS, ConfigurationHandler.stackItems));
+                sender.sendMessage(new TextComponentTranslation(Names.Command.Message.STACK_ITEMS, ConfigurationHandler.stackItems));
                 ConfigurationHandler.save();
                 return;
             } else if (args[0].equalsIgnoreCase(Names.Command.STACK_EXPERIENCE)) {
                 ConfigurationHandler.setStackExperience(Boolean.parseBoolean(args[1].toLowerCase(Locale.ENGLISH)));
-                sender.addChatMessage(new TextComponentTranslation(Names.Command.Message.STACK_EXPERIENCE, ConfigurationHandler.stackExperience));
+                sender.sendMessage(new TextComponentTranslation(Names.Command.Message.STACK_EXPERIENCE, ConfigurationHandler.stackExperience));
                 ConfigurationHandler.save();
                 return;
             }
         }
 
-        throw new WrongUsageException(getCommandUsage(sender));
+        throw new WrongUsageException(getUsage(sender));
     }
 }
 

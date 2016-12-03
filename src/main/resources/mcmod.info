@@ -2,7 +2,7 @@
 	"modListVersion": 2,
 	"modList": [
 		{
-			"modid": "Stackie",
+			"modid": "stackie",
 			"name": "Stackie",
 			"description": "Stack entities into groups to decrease lag.",
 			"mcversion": "${mcversion}",
@@ -12,9 +12,9 @@
 			],
 			"credits": "",
 			"dependants": [  ],
-			"dependencies": [ "Forge@[${minforgeversion},)", "LunatriusCore@[${coreversion},)" ],
+			"dependencies": [ "forge@[${minforgeversion},)", "lunatriuscore@[${coreversion},)" ],
 			"parent": "",
-			"requiredMods": [ "Forge@[${minforgeversion},)", "LunatriusCore@[${coreversion},)" ],
+			"requiredMods": [ "forge@[${minforgeversion},)", "lunatriuscore@[${coreversion},)" ],
 			"logoFile": "/assets/stackie/logo.png",
 			"screenshots": [  ],
 			"updateUrl": "http://mc.lunatri.us/",

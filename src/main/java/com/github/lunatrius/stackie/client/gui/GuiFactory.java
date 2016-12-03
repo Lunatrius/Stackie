@@ -30,7 +30,7 @@ public class GuiFactory implements IModGuiFactory {
         return null;
     }
 
-    public class GuiModConfig extends GuiConfigSimple {
+    public static class GuiModConfig extends GuiConfigSimple {
         public GuiModConfig(final GuiScreen guiScreen) {
             super(guiScreen, Reference.MODID, ConfigurationHandler.configuration, Names.Config.Category.GENERAL);
         }

@@ -45,6 +45,6 @@ public final class Names {
         public static final String MAXIMUM_EXPERIENCE = "maximumExperience";
         public static final String MAXIMUM_EXPERIENCE_DESC = "Experience will be stacked up to this amount.";
 
-        public static final String LANG_PREFIX = Reference.MODID_LOWER + ".config";
+        public static final String LANG_PREFIX = Reference.MODID + ".config";
     }
 }
