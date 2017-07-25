@@ -5,25 +5,27 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
 
+import java.util.Objects;
+
 public class StackingHandler {
     protected boolean stackItems(final EntityItem entityItemL, final EntityItem entityItemR) {
         if (!areEntityItemsEqual(entityItemL, entityItemR)) {
             return false;
         }
 
-        final ItemStack itemStackL = entityItemL.getEntityItem();
-        final ItemStack itemStackR = entityItemR.getEntityItem();
+        final ItemStack itemStackL = entityItemL.getItem();
+        final ItemStack itemStackR = entityItemR.getItem();
 
-        if (itemStackL.getCount() == ConfigurationHandler.maximumStackSize || itemStackR.getCount() == ConfigurationHandler.maximumStackSize) {
+        if (itemStackL.getCount() == ConfigurationHandler.General.maximumStackSize || itemStackR.getCount() == ConfigurationHandler.General.maximumStackSize) {
             return false;
         }
 
-        final int itemsIn = Math.min(ConfigurationHandler.maximumStackSize - itemStackL.getCount(), itemStackR.getCount());
+        final int itemsIn = Math.min(ConfigurationHandler.General.maximumStackSize - itemStackL.getCount(), itemStackR.getCount());
         itemStackL.setCount(itemStackL.getCount() + itemsIn);
         itemStackR.setCount(itemStackR.getCount() - itemsIn);
 
-        entityItemL.setEntityItemStack(itemStackL);
-        entityItemR.setEntityItemStack(itemStackR);
+        entityItemL.setItem(itemStackL);
+        entityItemR.setItem(itemStackR);
 
         entityItemL.age = Math.min(entityItemL.age, entityItemR.age);
 
@@ -46,8 +48,8 @@ public class StackingHandler {
             return false;
         }
 
-        final ItemStack itemStackL = entityItemL.getEntityItem();
-        final ItemStack itemStackR = entityItemR.getEntityItem();
+        final ItemStack itemStackL = entityItemL.getItem();
+        final ItemStack itemStackR = entityItemR.getItem();
 
         if (itemStackL == null || itemStackR == null) {
             return false;
@@ -77,7 +79,7 @@ public class StackingHandler {
             return false;
         }
 
-        if (itemStackL.hasTagCompound() && !itemStackL.getTagCompound().equals(itemStackR.getTagCompound())) {
+        if (itemStackL.hasTagCompound() && !Objects.equals(itemStackL.getTagCompound(), itemStackR.getTagCompound())) {
             return false;
         }
 
@@ -85,7 +87,7 @@ public class StackingHandler {
     }
 
     protected boolean stackExperience(final EntityXPOrb entityExpOrbL, final EntityXPOrb entityExpOrbR) {
-        final int experienceIn = Math.min(ConfigurationHandler.maximumExperience - entityExpOrbL.xpValue, entityExpOrbR.xpValue);
+        final int experienceIn = Math.min(ConfigurationHandler.General.maximumExperience - entityExpOrbL.xpValue, entityExpOrbR.xpValue);
         entityExpOrbL.xpValue += experienceIn;
         entityExpOrbR.xpValue -= experienceIn;
 
@@ -99,6 +101,6 @@ public class StackingHandler {
     }
 
     private boolean isEqual(final double a, final double b) {
-        return Math.abs(a - b) < ConfigurationHandler.distance;
+        return Math.abs(a - b) < ConfigurationHandler.General.distance;
     }
 }

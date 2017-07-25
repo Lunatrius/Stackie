@@ -1,20 +1,20 @@
 # gui - config
-stackie.config.stackLimit=Stack Limit
-stackie.config.stackLimit.tooltip=If the amount of entities surpasses this number stacking will be disabled (per dimension).
-stackie.config.interval=Interval
-stackie.config.interval.tooltip=Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.
-stackie.config.distance=Distance
-stackie.config.distance.tooltip=Maximum distance between items/experience orbs that can be still stacked (relative to block size).
-stackie.config.stackItems=Stack Items
-stackie.config.stackItems.tooltip=Should it stack items?
-stackie.config.stackExperience=Stack Experience
-stackie.config.stackExperience.tooltip=Should it stack experience orbs?
-stackie.config.stackSizes=Stack Sizes
-stackie.config.stackSizes.tooltip=A list of uniqueName-stackSize mappings. These values will override the default stack sizes.
-stackie.config.maximumStackSize=Maximum Stack Size
-stackie.config.maximumStackSize.tooltip=Items will be stacked up to this amount.
-stackie.config.maximumExperience=Maximum Experience
-stackie.config.maximumExperience.tooltip=Experience will be stacked up to this amount.
+stackie.general.stacklimit=Stack Limit
+stackie.general.stacklimit.tooltip=If the amount of entities surpasses this number stacking will be disabled (per dimension).
+stackie.general.interval=Interval
+stackie.general.interval.tooltip=Amount of ticks (20 ticks => 1 second) that will pass between each stacking attempt.
+stackie.general.distance=Distance
+stackie.general.distance.tooltip=Maximum distance between items/experience orbs that can be still stacked (relative to block size).
+stackie.general.stackitems=Stack Items
+stackie.general.stackitems.tooltip=Should it stack items?
+stackie.general.stackexperience=Stack Experience
+stackie.general.stackexperience.tooltip=Should it stack experience orbs?
+stackie.general.stacksizes=Stack Sizes
+stackie.general.stacksizes.tooltip=A list of uniqueName-stackSize mappings. These values will override the default stack sizes.
+stackie.general.maximumstacksize=Maximum Stack Size
+stackie.general.maximumstacksize.tooltip=Items will be stacked up to this amount.
+stackie.general.maximumexperience=Maximum Experience
+stackie.general.maximumexperience.tooltip=Experience will be stacked up to this amount.
 
 # commands
 commands.stackie.usage=/stackie <setinterval|setdistance|stackitems|stackexperience> <number|true|false>

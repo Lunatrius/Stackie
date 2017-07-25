@@ -31,7 +31,7 @@ public class StackingHandlerTick extends StackingHandler {
                 processWorlds(this.server.worlds);
             }
 
-            this.ticks = ConfigurationHandler.interval;
+            this.ticks = ConfigurationHandler.General.interval;
         }
     }
 
@@ -58,7 +58,7 @@ public class StackingHandlerTick extends StackingHandler {
                 }
             }
 
-            if (entityItems.size() >= 2 && entityItems.size() <= ConfigurationHandler.stackLimit) {
+            if (entityItems.size() >= 2 && entityItems.size() <= ConfigurationHandler.General.stackLimit) {
                 try {
                     stackItems(Lists.reverse(entityItems));
                 } catch (final Exception e) {
@@ -66,7 +66,7 @@ public class StackingHandlerTick extends StackingHandler {
                 }
             }
 
-            if (entityExperienceOrbs.size() >= 2 && entityExperienceOrbs.size() <= ConfigurationHandler.stackLimit) {
+            if (entityExperienceOrbs.size() >= 2 && entityExperienceOrbs.size() <= ConfigurationHandler.General.stackLimit) {
                 try {
                     stackExperience(Lists.reverse(entityExperienceOrbs));
                 } catch (final Exception e) {

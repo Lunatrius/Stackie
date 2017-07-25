@@ -15,12 +15,10 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.registry.GameData;
 
 public abstract class CommonProxy {
     public void preInit(final FMLPreInitializationEvent event) {
         Reference.logger = event.getModLog();
-        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
         FMLInterModComms.sendMessage("LunatriusCore", "checkUpdate", Reference.FORGE);
     }
@@ -32,14 +30,14 @@ public abstract class CommonProxy {
     }
 
     public void postInit(final FMLPostInitializationEvent event) {
-        for (final String info : ConfigurationHandler.stackSizes) {
+        for (final String info : ConfigurationHandler.General.stackSizes) {
             final String[] parts = info.split(Names.Config.STACK_SIZE_DELIMITER);
             if (parts.length == 2) {
                 try {
                     final String uniqueName = parts[0];
                     final int stackSize = MathHelper.clamp(Integer.parseInt(parts[1], 10), 1, 64);
 
-                    final Item item = GameData.getItemRegistry().getObject(new ResourceLocation(uniqueName));
+                    final Item item = Item.REGISTRY.getObject(new ResourceLocation(uniqueName));
                     if (item != null) {
                         item.setMaxStackSize(stackSize);
                     }

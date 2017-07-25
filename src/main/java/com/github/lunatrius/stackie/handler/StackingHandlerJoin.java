@@ -80,14 +80,9 @@ public class StackingHandlerJoin extends StackingHandler {
 
     private <T extends Entity> List<T> getNearbyEntities(final World world, final T entity) {
         final Class<T> clazz = (Class<T>) entity.getClass();
-        final Predicate<T> filter = new Predicate<T>() {
-            @Override
-            public boolean apply(final T input) {
-                return clazz.equals(input.getClass());
-            }
-        };
+        final Predicate<T> filter = (T input) -> clazz.equals(input.getClass());
 
-        final double distance = ConfigurationHandler.distance;
+        final double distance = ConfigurationHandler.General.distance;
         final AxisAlignedBB boundingBox = new AxisAlignedBB(entity.posX - distance, entity.posY - distance, entity.posZ - distance, entity.posX + distance, entity.posY + distance, entity.posZ + distance);
         return world.getEntitiesWithinAABB(clazz, boundingBox, filter);
     }

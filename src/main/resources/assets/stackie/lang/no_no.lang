@@ -1,16 +1,16 @@
 # gui - config
-stackie.config.stackLimit=Stabelbegrensning
-stackie.config.stackLimit.tooltip=Hvis antallet enheter overgår dette tallet vil stabling bli deaktivert (per dimensjon).
-stackie.config.interval=Intervall
-stackie.config.interval.tooltip=Antall ticks (20 ticks => 1 sekund) som vil gå mellom hvert stablingsforsøk.
-stackie.config.distance=Avstand
-stackie.config.distance.tooltip=Maksimal avstand mellom gjenstander/erfaringskuler som kan stables (relativt til blokkstørrelse).
-stackie.config.stackItems=Stable gjenstander
-stackie.config.stackItems.tooltip=Skal den stable gjenstander?
-stackie.config.stackExperience=Stable erfaringskuler
-stackie.config.stackExperience.tooltip=Skal den stable erfaringskuler?
-stackie.config.stackSizes=Stabelstørrelser
-stackie.config.stackSizes.tooltip=En liste over uniktNavn-stabelStørrelse-koblinger. Disse verdiene vil overstyre standard stabelstørrelser.
+stackie.general.stacklimit=Stabelbegrensning
+stackie.general.stacklimit.tooltip=Hvis antallet enheter overgår dette tallet vil stabling bli deaktivert (per dimensjon).
+stackie.general.interval=Intervall
+stackie.general.interval.tooltip=Antall ticks (20 ticks => 1 sekund) som vil gå mellom hvert stablingsforsøk.
+stackie.general.distance=Avstand
+stackie.general.distance.tooltip=Maksimal avstand mellom gjenstander/erfaringskuler som kan stables (relativt til blokkstørrelse).
+stackie.general.stackitems=Stable gjenstander
+stackie.general.stackitems.tooltip=Skal den stable gjenstander?
+stackie.general.stackexperience=Stable erfaringskuler
+stackie.general.stackexperience.tooltip=Skal den stable erfaringskuler?
+stackie.general.stacksizes=Stabelstørrelser
+stackie.general.stacksizes.tooltip=En liste over uniktNavn-stabelStørrelse-koblinger. Disse verdiene vil overstyre standard stabelstørrelser.
 
 # commands
 commands.stackie.usage=/stackie <setinterval|setdistance|stackitems|stackexperience> <tall|true|false>
