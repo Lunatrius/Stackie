@@ -40,7 +40,7 @@ public class StackingHandler {
             return false;
         }
 
-        if (entityItemL.delayBeforeCanPickup == 32767 || entityItemR.delayBeforeCanPickup == 32767) {
+        if (entityItemL.pickupDelay == 32767 || entityItemR.pickupDelay == 32767) {
             return false;
         }
 
